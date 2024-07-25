@@ -1,4 +1,4 @@
-package com.danmou.util.common;
+package com.danmou.beginner.common;
 
 import org.springframework.stereotype.Component;
 
