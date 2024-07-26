@@ -1,4 +1,4 @@
-package com.danmou.beginner;
+package com.danmou.beginner.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +13,7 @@ public class DemoController {
   private Coach myCoach;
 
   @Autowired
-  public DemoController(@Qualifier("cricketCoach") Coach coach) {
+  public DemoController(@Qualifier("aquatic") Coach coach) {
     this.myCoach = coach;
   }
 
