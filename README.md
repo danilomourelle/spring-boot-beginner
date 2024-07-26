@@ -30,3 +30,46 @@ java -jar ./target/<application-file.jar>
 Outra característica de um projeto “Spring Boot” é arquivo de propriedades que fica em `src/main/resources/application.properties` que pela explicação seria o equivalente a um `.env` com mais algumas outras funções, embora ele não apareça no *.gitignore*. Pelo que entendi, ele vai conseguir alterar alguns valores de configuração já esperados pelo “Spring Boot”, mas também vai aceitar alguns valores personalizados, que podem ser acessados através de um atributo de uma classe através da anotação `@Value("${prop.name}")`.
 
 Na verdade é exatamente isso. Depois de instalar algumas extensões para “Spring Boot” no VSCode (na verdade pode ter sido apenas uma coincidência), o arquivo de propriedades ficou com IntelliSense, então basicamente quando começa a digitar, ele já indica as propriedades configuradas por algumas das dependências do framework. A extensão do “Spring Boot” também tem uma aba que mostra as propriedades em uso, embora não seja possível ver os valores.
+
+### Spring Core
+
+A ideia do framework é ajudar bastante na questão de como subir um servidor web, mas uma característica muito marcante do framework é a habilidade de realizar a inversão de controle (através da injeção de dependência) de forma automática. Toda essa “mágica” é possível através de anotações nas classes, atributos e métodos. Por exemplo, para indicar que uma classe é passível de ser injetada em uma outra, ela precisa receber a anotação `@Component`, e com isso o “Spring Boot” marca essa classe como **bean** (seja lá o que isso quer dizer).
+
+Essa injeção pode ser feita de duas forma, sendo a primeira dela via construtor da classe que vai receber a dependência. Sendo assim, essa classe precisa ter um construtor, esperando receber uma instância da dependência, atribuindo ela a um atributo privado, e anotando esse construtor com `@Autowired`. (Preciso entender como fica no caso de um construtor com outras propriedades).
+
+Outra forma de injeção é através de um método **setter**. Então ao invés de ter um construtor, a classe que irá receber a injeção deve implementar um **setter** para o atributo que vai representar a injeção e anotar esse método com o `@Autowired`. Mas um detalhe legal é que na verdade o método pode ter qualquer nome, não  precisa ser `setAttribute`, o que precisa é ter a anotação mesmo.
+
+Segundo o curso, o “Spring” sugere a injeção via construtor pro padrão e ainda mais nos casos em que a injeção for obrigatória. Já a injeção via **setter** é para os casos onde ela vai ser “opcional” e tiver um comportamento padrão para casos em que não existir. Agora, uma coisa interessante é que a equipe de desenvolvimento não mais recomenda a injeção direta no atributo, que é como foi feito nos cursos do Nélio Alves. Aparentemente esse tipo de injeção funciona, mas deixa bem difícil de realizar testes.
+
+Um detalhe é que por padrão o framework só monitora pacotes que esteja no mesmo ramo da aplicação ou aninhados e ele. Caso tenham pacotes que estejam em ramos paralelos ao do ponto de entrada, a classe principal vai precisar receber uma configuração extra na anotação para avisar que deve monitorar por componentes nesse pacotes também.
+
+```java
+package com.danmou.beginner;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication(scanBasePackages = {"com.danmou.beginner", "com.danmou.util"})
+public class BeginnerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BeginnerApplication.class, args);
+	}
+}
+```
+
+Essas injeções, como são feitas automaticamente pelo framework, podem ter algumas situações diferentes, por exemplo, se a gente configurar uma dependência com o tipo de uma interface, o “Spring Boot” vai buscar por todos os **beans** que implementem essa interface para poder criar a instância e injetar. Em um caso em que uma interface for implementada por apenas uma classe, isso vai ser bem natural, mas nos casos em que mais de uma classe existir, o “Spring Boot” não sabe qual delas utilizar, e lança um erro na compilação. Para isso existe a anotação `@Qualifiers` que vai servir para indicar qual a classe deve ser utilizada. *Isso me parece meio bizarro, porque se é pra indicar a classe, bastava tipar a injeção no na classe, não?*
+
+Além dessa, existe uma outra alternativa que é a anotação `@Primary` que você coloca em uma das classes que implementam a interface desejada. Isso vai indicar para o framework de que aquela classe é quem tem a preferência, e em momentos de injeção com múltiplas opções, ela deverá ser escolhida. Obviamente apenas uma classe pode apresentar essa marcação, caso contrário, voltamos para o mesmo problema. Essa marcação não impede que seja utilizado um qualificador na classe que vai receber a injeção, e o classificador vai sempre ter prioridade, então basicamente a anotação de primário vai ser útil nos casos em que a classe que receber a injeção não especificar a qualificação.
+
+Por padrão, o “Spring Boot” vai verificar todas as injeções necessárias no lançamento da aplicação e então criar uma instância desses **beans** criando a relação de dependência entre elas. Esse comportamento padrão pode ser alterado ao adicionar a anotação `@Lazy` em algum **bean**, ou para todos os componentes através de uma configuração global no arquivo de propriedades. Tentar configurar a aplicação como “lazy” apenas vai melhorar a inicialização da aplicação, porém como desvantagens, pode levar a erros que serão identificados apenas nos momentos de uso, portanto, essa é uma melhoria da performance que deve ser feita com bastante cuidado.
+
+Em relação a estratégia de criação de um **bean**, por padrão, o framework trabalha com a estratégia de *Singleton*, o que significa que ela cria uma instância para cada **bean** e sempre que houver a necessidade, ela utiliza essa mesma instância. É possível alterar essa estratégia através da anotação `@Scope(ConfigurableBeanFactory.<ENUM>)` onde uma das opções é o *Prototype*, onde para cada injeção, uma instância nova é criada.
+
+Uma instancia de um **bean** vai ter anotações para o ciclo de vida dele (algo muito parecido para os componentes de classe do React), para isso basta você ter anotações em métodos que devam ser executados. No caso de um hook após a criação da instancia, basta adicionar a anotação `@PostConstruct` no método, já para o caso do hook pré destruição, basta adicionar a anotação `@PreDestroy`. **OBS**: para os casos de **beans** com escopo de *prototype*, o hook de destruição não é executado automaticamente.
+
+Como comentado, um **bean** é um classe marcada que vai ser utilizada pelo framework para criar uma instância sempre que ele identificar um injeção de um tipo correspondente. Agora nos casos em que você quer ter um tipo injetado, mas esse tipo não é de uma classe da base de código, mas sim algo de uma biblioteca externa por exemplo, a geração desse tipo provavelmente pode não estar marcada.
+
+Então para utilizar esse tipo como um **bean**, a gente precisa realizar uma estratégia de envolver esse tipo externo em um componente próprio. O curso deu como exemplo a gente criar uma classe com a anotação `@Configuration` e então criar um método nessa classe que vai criar a instância desse tipo terceiro e retornar ele. Nesse método, a gente adiciona a marcação `@Bean` e assim, esse tipo vai ficar disponível como um **bean** através do mesmo nome do método, ou através de um id personalizado adicionado na anotação.
+
+Eu imagino que nada impediria de criar uma classe inteira para isso, mas nesse caso, para cada tipo externo você teria que ter uma classe de embrulho, e com a marcação do método, você consegue ter uma classe de configuração e um **bean** por método dentro dela.
