@@ -18,7 +18,8 @@ public class BeginnerApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(IStudentDAO studentDAO) {
 		return runner -> { 
-			createStudent(studentDAO);
+			// createStudent(studentDAO);
+			readStudent(studentDAO);
 		};
 	}
 
@@ -30,5 +31,12 @@ public class BeginnerApplication {
 		studentDAO.save(student);
 
 		System.out.println("Save student. Generated id: " + student.getId());
+	}
+
+	private void readStudent(IStudentDAO studentDAO){
+		System.out.println("Finding for student ID: 2...");
+		Student student = studentDAO.findById(2);
+
+		System.out.println(student);;
 	}
 }
