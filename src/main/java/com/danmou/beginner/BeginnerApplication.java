@@ -1,5 +1,7 @@
 package com.danmou.beginner;
 
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +21,9 @@ public class BeginnerApplication {
 	public CommandLineRunner commandLineRunner(IStudentDAO studentDAO) {
 		return runner -> { 
 			// createStudent(studentDAO);
-			readStudent(studentDAO);
+			// readStudent(studentDAO);
+			queryForStudents(studentDAO);
+			queryForStudentsByLastName(studentDAO);
 		};
 	}
 
@@ -38,5 +42,23 @@ public class BeginnerApplication {
 		Student student = studentDAO.findById(2);
 
 		System.out.println(student);;
+	}
+
+	private void queryForStudents(IStudentDAO studentDAO){
+		System.out.println("Querying all students...");
+		List<Student> students = studentDAO.findAll();
+
+		for (Student student : students) {
+			System.out.println(student);;
+		}
+	}
+
+	private void queryForStudentsByLastName(IStudentDAO studentDAO){
+		System.out.println("Querying all students with last name 'Garcia'");
+		List<Student> students = studentDAO.findByLastName("Garcia");
+
+		for (Student student : students) {
+			System.out.println(student);;
+		}
 	}
 }
