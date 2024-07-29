@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: begginer
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:postgresql:SpringBoot
+    username: danilomourelle
+    password: oPN5L94wkD389W7rY3MY3
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+logging:
+  level:
+    root: warn
+  
