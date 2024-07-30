@@ -82,6 +82,7 @@ public class BeginnerApplication {
 
 	private void deleteStudent(IStudentDAO studentDAO){
 		System.out.println("Deleting student '3'...");
-		studentDAO.delete(3);
+		int r = studentDAO.updateByLastName("Garcia");
+		System.out.println(r);
 	}
 }
