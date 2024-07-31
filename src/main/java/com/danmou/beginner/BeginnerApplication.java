@@ -21,11 +21,12 @@ public class BeginnerApplication {
 	public CommandLineRunner commandLineRunner(IStudentDAO studentDAO) {
 		return runner -> {
 			// createStudent(studentDAO);
+			createMultopleStudents(studentDAO);
 			// readStudent(studentDAO);
 			// queryForStudents(studentDAO);
 			// queryForStudentsByLastName(studentDAO);
 			// updateStudent(studentDAO);
-			deleteStudent(studentDAO);
+			// deleteStudent(studentDAO);
 		};
 	}
 
@@ -37,6 +38,18 @@ public class BeginnerApplication {
 		studentDAO.save(student);
 
 		System.out.println("Save student. Generated id: " + student.getId());
+	}
+
+	private void createMultopleStudents(IStudentDAO studentDAO) {
+		System.out.println("Creating 3 new student...");
+		Student janeD = new Student("Jane", "Doe", "jane@email.com");
+		Student joaoS = new Student("João", "Silva", "jane.silva@email.com");
+		Student mariaS = new Student("Maria", "Silva", "john.silva@email.com");
+
+		System.out.println("Saving student...");
+		studentDAO.save(janeD);
+		studentDAO.save(joaoS);
+		studentDAO.save(mariaS);
 	}
 
 	private void readStudent(IStudentDAO studentDAO) {
