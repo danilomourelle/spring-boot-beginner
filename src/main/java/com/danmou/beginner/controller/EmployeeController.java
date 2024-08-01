@@ -11,7 +11,7 @@ import com.danmou.beginner.entity.Employee;
 import com.danmou.beginner.service.EmployeeService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -43,5 +43,13 @@ public class EmployeeController {
     newEmployee.setId(null);
 
     return employeeService.save(newEmployee);
+  }
+
+  @PutMapping("/{id}")
+  public Employee updateEmployee(@PathVariable int id, @RequestBody Employee employeeToUpdate) {
+    System.out.println(employeeToUpdate);
+    employeeToUpdate.setId(id);
+
+    return employeeService.save(employeeToUpdate);
   }
 }
