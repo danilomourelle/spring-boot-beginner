@@ -6,4 +6,5 @@ import com.danmou.beginner.entity.Employee;
 
 public interface EmployeeService {
   List<Employee> findAll();
+  Employee findById(int id);
 }
