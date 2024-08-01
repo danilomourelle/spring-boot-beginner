@@ -3,6 +3,7 @@ package com.danmou.beginner.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.danmou.beginner.dao.EmployeeDAO;
 import com.danmou.beginner.entity.Employee;
@@ -24,5 +25,11 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public Employee findById(int id) {
     return employeeDAO.findById(id);
+  }
+
+  @Transactional
+  @Override
+  public Employee save(Employee employee) {
+    return employeeDAO.save(employee);
   }
 }

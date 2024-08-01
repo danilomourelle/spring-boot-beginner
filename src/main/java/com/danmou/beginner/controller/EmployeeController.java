@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.danmou.beginner.entity.Employee;
 import com.danmou.beginner.service.EmployeeService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/employees")
@@ -33,5 +36,12 @@ public class EmployeeController {
     }
 
     return employee;
+  }
+
+  @PostMapping()
+  public Employee addEmployee(@RequestBody Employee newEmployee) {
+    newEmployee.setId(null);
+
+    return employeeService.save(newEmployee);
   }
 }
