@@ -1,0 +1,23 @@
+package com.danmou.beginner.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.danmou.beginner.dao.EmployeeDAO;
+import com.danmou.beginner.entity.Employee;
+
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+  private EmployeeDAO employeeDAO;
+
+  public EmployeeServiceImpl(EmployeeDAO employeeDAO) {
+    this.employeeDAO = employeeDAO;
+  }
+
+  @Override
+  public List<Employee> findAll() {
+    return employeeDAO.findAll();
+  }
+}
