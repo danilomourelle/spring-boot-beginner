@@ -3,6 +3,9 @@ spring:
     name: begginer
   main:
     banner-mode: off
+  data:
+    rest:
+      base-path: /api
   datasource:
     url: jdbc:postgresql:SpringBoot
     username: danilomourelle
