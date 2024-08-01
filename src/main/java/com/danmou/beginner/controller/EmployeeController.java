@@ -2,6 +2,7 @@ package com.danmou.beginner.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,5 +52,17 @@ public class EmployeeController {
     employeeToUpdate.setId(id);
 
     return employeeService.save(employeeToUpdate);
+  }
+
+  @DeleteMapping("/{id}")
+  public String deleteEmployee(@PathVariable int id) {
+    Employee existingEmployee = employeeService.findById(id);
+    if (existingEmployee == null) {
+      throw new RuntimeException("Employee with id " + id + " does not exists");
+    }
+
+    employeeService.deleteById(id);
+
+    return "Deleted Employee with id " + id ;
   }
 }
