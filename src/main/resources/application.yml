@@ -30,5 +30,7 @@ logging:
         orm:
           jdbc:
             bind: trace
+      springframework:
+        security: DEBUG
     root: warn
   
