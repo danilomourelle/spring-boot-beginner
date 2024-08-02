@@ -1,12 +1,101 @@
 package com.danmou.beginner;
 
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication(scanBasePackages = {"com.danmou.beginner", "com.danmou.util"})
+import com.danmou.beginner.dao.IStudentDAO;
+import com.danmou.beginner.entities.Student;
+
+@SpringBootApplication()
 public class BeginnerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BeginnerApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(IStudentDAO studentDAO) {
+		return runner -> {
+			// createStudent(studentDAO);
+			createMultopleStudents(studentDAO);
+			// readStudent(studentDAO);
+			// queryForStudents(studentDAO);
+			// queryForStudentsByLastName(studentDAO);
+			// updateStudent(studentDAO);
+			// deleteStudent(studentDAO);
+		};
+	}
+
+	private void createStudent(IStudentDAO studentDAO) {
+		System.out.println("Creating new student...");
+		Student student = new Student("Danilo", "Mourelle", "danilomourelle@outlook.com");
+
+		System.out.println("Saving student...");
+		studentDAO.save(student);
+
+		System.out.println("Save student. Generated id: " + student.getId());
+	}
+
+	private void createMultopleStudents(IStudentDAO studentDAO) {
+		System.out.println("Creating 3 new student...");
+		Student janeD = new Student("Jane", "Doe", "jane@email.com");
+		Student joaoS = new Student("João", "Silva", "jane.silva@email.com");
+		Student mariaS = new Student("Maria", "Silva", "john.silva@email.com");
+
+		System.out.println("Saving student...");
+		studentDAO.save(janeD);
+		studentDAO.save(joaoS);
+		studentDAO.save(mariaS);
+	}
+
+	private void readStudent(IStudentDAO studentDAO) {
+		System.out.println("Finding for student ID: 2...");
+		Student student = studentDAO.findById(2);
+
+		System.out.println(student);
+		;
+	}
+
+	private void queryForStudents(IStudentDAO studentDAO) {
+		System.out.println("Querying all students...");
+		List<Student> students = studentDAO.findAll();
+
+		for (Student student : students) {
+			System.out.println(student);
+			;
+		}
+	}
+
+	private void queryForStudentsByLastName(IStudentDAO studentDAO) {
+		System.out.println("Querying all students with last name 'Garcia'");
+		List<Student> students = studentDAO.findByLastName("Garcia");
+
+		for (Student student : students) {
+			System.out.println(student);
+			;
+		}
+	}
+
+	private void updateStudent(IStudentDAO studentDAO) {
+		System.out.println("Retrieving student '1'...");
+		Student student = studentDAO.findById(1);
+
+		System.out.println("Updating first name...");
+		student.setFirstName("Luigi");
+
+		System.out.println("Saving update...");
+		studentDAO.update(student);
+
+		System.out.println(student);
+	}
+
+	private void deleteStudent(IStudentDAO studentDAO){
+		System.out.println("Deleting student '3'...");
+		int r = studentDAO.updateByLastName("Garcia");
+		System.out.println(r);
 	}
 }
