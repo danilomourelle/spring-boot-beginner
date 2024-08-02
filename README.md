@@ -73,3 +73,51 @@ Como comentado, um **bean** é um classe marcada que vai ser utilizada pelo fram
 Então para utilizar esse tipo como um **bean**, a gente precisa realizar uma estratégia de envolver esse tipo externo em um componente próprio. O curso deu como exemplo a gente criar uma classe com a anotação `@Configuration` e então criar um método nessa classe que vai criar a instância desse tipo terceiro e retornar ele. Nesse método, a gente adiciona a marcação `@Bean` e assim, esse tipo vai ficar disponível como um **bean** através do mesmo nome do método, ou através de um id personalizado adicionado na anotação.
 
 Eu imagino que nada impediria de criar uma classe inteira para isso, mas nesse caso, para cada tipo externo você teria que ter uma classe de embrulho, e com a marcação do método, você consegue ter uma classe de configuração e um **bean** por método dentro dela.
+
+### Hibernate/JPA
+
+Como já visto no outro curso de Java JPA (Jakarta Persistence  API), é uma especificação que vai definir uma interface que deve ser utilizada por quem quer que venha a criar uma solução “JPA”. Atualmente o *Hibenate* é a principal implementação de JPA e é utilizada por padrão no “Spring Boot”, mas não é a única, também existe a Eclipse Link.
+
+A ideia de uma especificação é que isso tornaria muito natural fazer a troca entre ORMs que implementam a interface do JPA (teoricamente). Outra facilidade que temos é a total abstração de SQL, sendo que qualquer manipulação de dados em um banco de dados vai acontecer através de métodos específicos e não mais através de queries SQL.
+
+Lembrando que interações com o banco de dados em Java costuma usar o JDBC que é uma ferramenta no estilo de um driver que vai realizar a conexão com o banco, gerando um cliente e vai executar queries SQL contra esse banco, então no final das contas nosso código vai usar o ORM *Hibernate* através de métodos definidos pela interface *JPA* sendo que na sua implementação, ele vai se conectar e executar queries no banco de dados através do *JDBC*.
+
+Para utilizar o ORM, assim como foi até agora a gente vai precisar de anotações, e a mais básica delas vai ser a `@Entity` que vai relacionar uma classe Java com uma tabela no banco de dados. Vale lembrar que ao marcar um classe com essa anotação, você fica obrigado e colocar um construtor sem argumentos na classe. Um detalhe é que uma classe sem nenhum construtor declarado, o Java acrescenta esse construtor sem argumento, o que bastaria no caso, mas caso já exista um construtor com argumentos, o Java não faz mais nada, então precisa ser feito a implementação dele manualmente.
+
+Nessa classe você também consegue indicar que os atributos vão se relacionar a colunas da tabela. Uma boa prática é adicionar a anotação `@Column` com o argumento para o “name”, mesmo nos casos em que o nome do atributo seja o mesmo da coluna, pois em futuras manutenções, caso esse atributo seja renomeado, isso não precisará refletir no banco. 
+
+Outra marcação de em atributo é a anotação `@Id` que vai indicar ele como sendo a chave primária da tabela. Em casos de gerenciamento automático, como um auto incremento ou geração de UUID, vai ser natural uma segunda anotação nesse atributo que é o `@GeneratedValue` com o argumento “strategy”. Um detalhe interessante é que ao contrário do outro curso, este aqui não adicionou o id no construtor uma vez que ele vai ser auto gerenciado.
+
+O curso está usando uma estratégia diferente onde ao invés de utilizar a interface *JpaRepository*, a gente vai criar uma interface **DAO**, e então, implementar essa interface em um classe que vai representar o nosso objeto **DAO**. Essa classe vai injetar uma instância do tipo **EntityManager** e essa instância vai trazer uma séria de métodos auxiliares para a manipulação dos dados. Então é como se ela fosse um segundo nível de abstração, onde o **EntityManager** faz a abstração do SQL para linguagem de código, e a classe **DAO** faz a abstração de um código terceiro para um código próprio.
+
+Essa classe **DAO** precisa receber a anotação `@Repository` que vai marcar a classe como um **bean** do “SpringBoot”, precisa ter um construtor para receber a injeção do **EntityRepository** e o método vai precisar receber uma anotação `@Transaction` do springframework para indicar que as queries executadas contra o banco vão ser todas executadas com sucesso para então serem confirmadas. Obviamente essa última anotação vai acontecer apenas nos caso onde vai acontecer uma alteração de dado e não no caso de apenas uma leitura.
+
+Uma forma de utilizar o **EntityManager** para criar queries customizadas contra o banco de dados, é utilizando o método `createQuery(string)` que vai receber um texto muito próximo do que seria um SQL. Por uma característica do *Hibernate* esse texto não precisa do termo “SELECT” e pode iniciar o termo “FROM”, mas uma característica interessante é que por mais que seja um dialeto próximo do SQL, os valores usados nas entidades devem ser os nomes utilizados na classe e não o do banco de dados.
+
+Nessa criação da query, também é possível indicar um placeholder para um valor a ser utilizado prefixando o termo com “:” e após a criação é possível fazer a configuração do valor que deve ser utilizado no lugar do placeholder.
+
+Após todos os ajustes, executa-se a query contra o banco de dados com o método `getResultList()`, e nesses casos a resposta costuma vir em um formato de lista, uma vez que estamos executando um comando de leitura onde podem retornar vários registros.
+
+```java
+TypedQuery<Student> query = entityManager
+		.createQuery("FROM Student WHERE lastName=:value1", Student.class)
+    .setParameter("value1", lastName);
+    
+    List<Student> students = query.getResultList();
+```
+
+Por outro lado é possível criar queries de escrita também de forma customizada, por exemplo, quando se pretende fazer uma atualização em massa, ao invés de acessar todos os objetos, é possível criar uma query customizada, mas nesses casos o comando “UPDATE” é necessário além do fato de que o método que vai executar a query é o `executeUpdate()` que vai ter como retorno a quantidade de linhas afetadas pelo comando.
+
+Uma vez que o *Hibernate* é considerado um ORM, imagina-se que ele possa não só fazer a gestão dos dados mas também da estrutura do banco, então um sistema para criar tabelas como as migrations do Prisma deveria acontecer, e acontece, mas não dessa forma como as migrations. O que acontece é que o *Hibernate* aceita uma configuração que vai indicar se ao ser executado, ele deve interagir com a estrutura do banco de dados de acordo com as anotações presentes no código. Essa configuração fica em `spring.jpa.hibernate.ddl-auto` e ela pode receber os seguinte valores
+
+| none | Não faz nenhuma alteração estrutural |
+| --- | --- |
+| create-only | Apenas faz a criação de algo que tenha uma anotação, mas não existe no banco de dados |
+| drop | Deleta todas as estrutura que existam no banco e tenham uma marcação |
+| create | Deleta tudo que tenha uma marcação e recria completamente do zero |
+| create-drop | Delete tudo, recria do zero, e ao encerrar volta a deletar tudo que tem uma marcação |
+| validate | Valida a estrutura do banco de acordo com as marcações do código |
+| update | Realizar atualizações de algo que já exista e foi modificado de acordo com as marcações |
+
+Infelizmente isso parece um pouco complicado de gerenciar e muito fácil de cometer um engano, e como quase tudo deleta os itens do banco parece algo muito perigoso para ser utilizado como uma ferramenta de auxílio no processo de deploy, então basicamente essa configuração vai ficar restrita ao ambiente de desenvolvimento e de testes. É citado uma outra ferramenta para controle de migrations, então há uma luz no fim do túnel.
+
