@@ -1,8 +1,6 @@
 spring:
   application:
     name: begginer
-  main:
-    banner-mode: off
   data:
     rest:
       base-path: /api
@@ -17,6 +15,12 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+  main:
+    banner-mode: off
+  security:
+    user:
+      name: dan
+      password: 1234
 
 logging:
   level:
