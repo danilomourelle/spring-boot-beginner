@@ -3,13 +3,17 @@ spring:
     name: begginer
   main:
     banner-mode: off
+  data:
+    rest:
+      base-path: /api
+      default-page-size: 50
   datasource:
     url: jdbc:postgresql:SpringBoot
     username: danilomourelle
     password: oPN5L94wkD389W7rY3MY3
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
