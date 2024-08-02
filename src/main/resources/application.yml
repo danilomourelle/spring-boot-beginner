@@ -6,6 +6,7 @@ spring:
   data:
     rest:
       base-path: /api
+      default-page-size: 50
   datasource:
     url: jdbc:postgresql:SpringBoot
     username: danilomourelle
