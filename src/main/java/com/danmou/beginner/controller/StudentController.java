@@ -13,14 +13,17 @@ import com.danmou.beginner.model.Student;
 
 @Controller
 public class StudentController {
-  @Value("${countries}")
+  @Value("${application.countries}")
   private List<String> countries;
+  @Value("${application.languages}")
+  private List<String> languages;
 
   @GetMapping("/student-form")
   public String showForm(Model model) {
     Student student = new Student();
     model.addAttribute("student", student);
     model.addAttribute("countries", countries);
+    model.addAttribute("languages", languages);
 
     return "student-form";
   }

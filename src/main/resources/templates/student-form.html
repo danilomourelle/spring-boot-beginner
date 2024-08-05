@@ -9,18 +9,32 @@
 
 <body>
   <h3>Student Registration Form</h3>
-  <form th:action="@{/process-form}" th:object="${student}" method="post">
+  <input th:action="@{/process-form}" th:object="${student}" method="post">
     <label for="first_name">First name: </label>
     <input type="text" name="first_name" th:field="*{firstName}">
     <br><br>
+
     <label for="last_name">Last name: </label>
     <input type="text" name="last_name" th:field="*{lastName}">
     <br><br>
+
+    <label for="gender">Gênero: </label>
+    <input type="radio" name="gender" th:field="*{gender}" value="Male"> Male
+    <input type="radio" name="gender" th:field="*{gender}" value="Female"> Female
+    <br><br>
+
     <label for="country">Country: </label>
     <select name="country" th:field="*{country}">
-      <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}" ></option>
+      <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}"></option>
     </select>
     <br><br>
+
+    <label for="favorite_language">Favorite language: </label>
+    <select name="favorite_language" th:field="*{favoriteLanguage}">
+      <option th:each="tempLanguage : ${languages}" th:value="${tempLanguage}" th:text="${tempLanguage}"></option>
+    </select>
+    <br><br>
+
     <input type="submit">
   </form>
 </body>

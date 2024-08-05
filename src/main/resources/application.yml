@@ -34,4 +34,6 @@ logging:
         security: DEBUG
     root: warn
   
-countries: Brazil,France,Germany,India,Mexico,Spain,United States
+application:
+  countries: Brazil,France,Germany,India,Mexico,Spain,United States
+  languages: Go,JavaScript,Python,Elixir
