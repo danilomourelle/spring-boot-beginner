@@ -34,3 +34,4 @@ logging:
         security: DEBUG
     root: warn
   
+countries: Brazil,France,Germany,India,Mexico,Spain,United States
