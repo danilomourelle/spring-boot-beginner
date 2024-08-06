@@ -33,4 +33,3 @@ logging:
       springframework:
         security: DEBUG
     root: warn
-  
