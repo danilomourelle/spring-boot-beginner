@@ -15,6 +15,10 @@
   <p>Student is a <span th:text="${student.gender}"></span> person</p>
   <p>Student's country: <span th:text="${student.country}"></span></p>
   <p>Student's favorite language: <span th:text="${student.favoriteLanguage}"></span></p>
+  <p>Has knowledge on OS:</p>
+  <ul>
+    <li th:each="tempSystem : ${student.systemsWithKnowledge}" th:text="${tempSystem}"></li>
+  </ul>
 </body>
 
 </html>

@@ -19,6 +19,12 @@
       <input type="text" name="last_name" th:field="*{lastName}">
       <br><br>
 
+      <label for="country">Country: </label>
+      <select name="country" th:field="*{country}">
+        <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}"></option>
+      </select>
+      <br><br>
+
       <label for="gender">Gênero: </label>
       <input type="radio" name="gender" th:field="*{gender}" value="Male"> Male
       <input type="radio" name="gender" th:field="*{gender}" value="Female"> Female
@@ -29,10 +35,10 @@
         th:value="${tempLang}" th:text="${tempLang}">
       <br><br>
 
-      <label for="country">Country: </label>
-      <select name="country" th:field="*{country}">
-        <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}"></option>
-      </select>
+      <label for="operational_system">OS Knowledge: </label>
+      <input type="checkbox" name="operational_system" th:field="*{systemsWithKnowledge}" th:value="'Microsoft Windows'"> Windows
+      <input type="checkbox" name="operational_system" th:field="*{systemsWithKnowledge}" th:value="Linux"> Linux
+      <input type="checkbox" name="operational_system"  th:field="*{systemsWithKnowledge}" th:value="Mac"> Mac
       <br><br>
 
       <input type="submit">

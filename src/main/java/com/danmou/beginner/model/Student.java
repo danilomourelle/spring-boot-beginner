@@ -1,11 +1,14 @@
 package com.danmou.beginner.model;
 
+import java.util.List;
+
 public class Student {
   private String firstName;
   private String lastName;
   private String country;
-  private String favoriteLanguage;
   private String gender;
+  private String favoriteLanguage;
+  private List<String> systemsWithKnowledge;
 
   public Student() {
 
@@ -35,6 +38,14 @@ public class Student {
     this.country = country;
   }
 
+  public String getGender() {
+    return gender;
+  }
+
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
   public String getFavoriteLanguage() {
     return favoriteLanguage;
   }
@@ -43,11 +54,11 @@ public class Student {
     this.favoriteLanguage = language;
   }
 
-  public String getGender() {
-    return gender;
+  public List<String> getSystemsWithKnowledge() {
+    return systemsWithKnowledge;
   }
 
-  public void setGender(String gender) {
-    this.gender = gender;
+  public void setSystemsWithKnowledge(List<String> systemsWithKnowledge) {
+    this.systemsWithKnowledge = systemsWithKnowledge;
   }
 }
