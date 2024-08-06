@@ -1,12 +1,13 @@
 package com.danmou.beginner.model;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class Customer {
   private String firstName;
 
-  @NotBlank(message = "required")
-  // @Size(min = 2, message = "at least two character");
+  @NotNull(message = "required")
+  @Size(min = 2, message = "at least two character")
   private String lastName;
 
   public Customer() {
@@ -28,5 +29,4 @@ public class Customer {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
-
 }
