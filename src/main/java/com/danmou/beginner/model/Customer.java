@@ -12,7 +12,8 @@ public class Customer {
   @NotNull(message = "required")
   @Size(min = 2, message = "at least two character")
   private String lastName;
-
+  
+  @NotNull(message = "required")
   @Min(value = 0, message = "must be greater than or equal to 0")
   @Max(value = 10, message = "must be less than or equal to 10")
   private Integer freePasses;
@@ -21,7 +22,6 @@ public class Customer {
   private String postalCode;
 
   public Customer() {
-
   }
 
   public String getFirstName() {
