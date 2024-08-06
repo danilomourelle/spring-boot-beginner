@@ -33,8 +33,3 @@ logging:
       springframework:
         security: DEBUG
     root: warn
-  
-application:
-  countries: Brazil,France,Germany,India,Mexico,Spain,United States
-  languages: Go,JavaScript,Python,Elixir
-  systems: Linux,MacOS,Microsoft Windows,Android,iOS
