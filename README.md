@@ -146,6 +146,7 @@ Um outro ponto interessante que apareceu aqui é a dependência `spring-boot-sta
 Esses endpoints vão ter como recurso no que seria o nome da entidade em lower case e no plural (como ficaria nomes compostos?), além disso os endpoints vão seguir o padrão HATEOAS que é devolver além dos dados requeridos, uma serie de outros metadados que auxiliam na navegação pela própria API, basicamente é o que acontece na API do TOA.
 
 A parte de gestão de erro, ele não envia um corpo de reposta mas mandou bem um status de erro, quando buscamos por um id não existente, mas quando por exemplo, ao invés de colocar um número, eu coloquei uma letra, voltou um erro com corpo, mas o status 500. Isso provavelmente porque a lib que vai fazer a conversão da string na URL para o tipo numérico esperado lança um erro do tipo `Exception` que é o tipo mais baixo, e essa lib automática deve considerar esse tipo de erro como um erro interno de servidor.
+
 ### Rest Security
 
 Aqui voltaremos a falar da dependência `spring-boot-starter-security`. Ela vai automaticamente criar um sistema de autenticação para a API exposta pelo “Spring Boot”. Por padrão, quando tentarmos acessar um endpoint válido, ela irá abrir uma tela de login padrão do framework requisitando um usuário e senha. O usuário padrão é “user” enquanto que a senha vai ser impressa nos logs de inicialização. É possível estabelecer esses dois valores através do arquivo de propriedades.
@@ -163,3 +164,42 @@ Para mudar o local de armazenamento dos dados dos usuários da memória da aplic
 Quando utilizando esse formato, ele define alguns padrões para o esquema de banco de dados que ele precisa para fazer o controle. Esses padrão foi definido no script SQL 05. Mas é possível indicar para ele qual deve ser as queries a serem utilizadas para encontrar usuários e perfis, caso seja armazenar essas informações em um esquema diferente do padrão esperado.
 
 Bom, o código mostra como você pode ter tabelas com outros nomes tanto para a tabela em si, quanto para as colunas, mas acontece que nem tudo é tão mágico assim. Aparentemente apesar de poder trocar os nomes, você ainda vai ter a necessidade de fazer uma query onde os registros são três campos, sendo o primeiro campo representando o username, o segundo representando a senha, e o terceiro algum campo que possa ser convertido para booleano para indicar se o usuário está ativo ou não. Então você renomeia, mas fica preso a um certo tipo de padrão (por isso não gosto de frameworks).
+
+### Spring MVC - Thymeleaf
+
+Essa é uma dependência que vai servir para criar templates HTML para que seja feito uma aplicação web com server side rendering. Apesa de poder ser utilizada em um projeto Maven que não seja “Spring Boot”, ele foi pensado para ser utilizado dentro de um projeto “Spring Boot”. Para utilizá-lo, basta adicionar a dependência no `pom.xml`.
+
+```xml
+<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-thymeleaf</artifactId>
+<dependency>
+```
+
+A ideia é que nessa integração que acontece automaticamente, você precisa ter um método com a anotação de mapeamento para um endpoint GET. Esse método vai receber como argumento um tipo `Model` do *org.springframework.ui* e esse modelo vai receber atributos em um estilo chave valor. Ao final o endpoint deve retornar uma string, sendo que essa string deve ser o nome do arquivo de template do thymeleaf.
+
+Esse arquivo de template, é um arquivo HTML que vai ficar o caminho *src/main/resources/templates* e nesse template ele vai poder receber algumas anotações específicas do Thymeleaf onde se utiliza as chaves que serão configuradas com valores no modelo.
+
+Ao ser acessado, o endpoint pode processar os dados, configurar um valor dinamicamente no atributo do modelo, e então, ao responder com a string, o Thymeleaf vai buscar pelo template, e realizar as substituições das chaves pelos valores configurados no modelo, e devolver um HTML pronto para ser renderizado pelo browser.
+
+Esse template HTML pode ter o CSS aplicado de algumas formas, sendo tanto por link local quanto remoto. No link local, a gente pode colocar um arquivo CSS comum dentro do caminho  *src/main/resources/static*, dentro desse caminho fica qualquer arquivo estático que vá ser utilizado em uma renderização, como CSS, imagens, JavaScript, etc. Por isso a criação de sub diretórios é liberada a vontade do programador. Vale lembrar que a tag de link deve receber uma anotação própria do Thymeleaf indicando a localização final do CSS.
+
+Fazendo a parte onde ele mostra como se comporta um formulário, foi mostrado como se utiliza os atributos do thymeleaf, mas também foi explicado como funciona os formulários com método GET e com método POST. Em um método GET, ele vai fazer uma requisição GET, mas vai adicionar na URL os dados do formulário como query. Já no método POST, vai colocar as informações no corpo da requisição e não mais na URL.
+
+A vantagem de se usar um GET é que ter as informações na URL faz com que você consiga reproduzir essa mesma consulta sempre que precisar, por exemplo ao enviar para alguém que vai abrir e ter os mesmos dados de formulário. Já a vantagem de ter um POST é a possibilidade de se enviar arquivos binários e também não ter tanto problemas com o tamanho dos dados que vão ser adicionados na URL.
+
+Nos mais variados inputs do HMTL, a ideia principal é que você pode adicionar um atributo `th:field` que vai representar qual o atributo do objeto modelo que vai receber o valor daquele input, sendo que os inputs que podem ter um valor de apresentação de tela, e outro para o valor sistêmico, esse valor sistêmico pode ser definido com o atributo `th:value` enquanto que o valor de tela pode ser definido através do atributo `th:text`. Na verdade esse último pega um valor que vai ser definido dinamicamente pelo Thymeleaf e colocar como o valor entre tags do HTML.
+
+No método que vai receber os dados do formulário, é possível fazer uma validação dos dados através de uma dependência de validação. Quando associada em um método que vai receber os dados de um formulário através da anotação `@Valid` essa validação vai acontecer de forma automática. O xml da dependência que faz essa validação faz parte dos pacotes starter do “Spring Boot”.
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+Com essa dependência, é possível adicionar uma série de anotações nos atributos da classe modelo que serão usado na validação (algo parecido com os método da biblioteca Zod). Além disso é possível criar a própria anotações estendendo o pacote para ser utilizado pela dependência de validação. Ao final dessas validações, é possível ter uma lista de erros encontrados, e uma vez tendo erros, re-enviar o HTML do formulário no lugar da página de confirmação.
+
+Esses erros ficam disponíveis na integração do validador com o Thymeleaf para que seja possível mostrar a mensagem de erro após essa nova renderização.
+
