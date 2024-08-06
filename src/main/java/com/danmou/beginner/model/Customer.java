@@ -1,5 +1,7 @@
 package com.danmou.beginner.model;
 
+import com.danmou.beginner.validation.CourseCode;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +22,9 @@ public class Customer {
 
   @Pattern(regexp = "^\\d{5}-\\d{3}", message = "00000-000 format")
   private String postalCode;
+
+  @CourseCode(value = "LUV", message = "Couse code starts with LUV")
+  private String courseCode;
 
   public Customer() {
   }
@@ -54,5 +59,13 @@ public class Customer {
 
   public void setPostalCode(String postalCode) {
     this.postalCode = postalCode;
+  }
+
+  public String getCourseCode() {
+    return courseCode;
+  }
+
+  public void setCourseCode(String courseCode) {
+    this.courseCode = courseCode;
   }
 }
