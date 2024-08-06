@@ -36,9 +36,7 @@
       <br><br>
 
       <label for="operational_system">OS Knowledge: </label>
-      <input type="checkbox" name="operational_system" th:field="*{systemsWithKnowledge}" th:value="'Microsoft Windows'"> Windows
-      <input type="checkbox" name="operational_system" th:field="*{systemsWithKnowledge}" th:value="Linux"> Linux
-      <input type="checkbox" name="operational_system"  th:field="*{systemsWithKnowledge}" th:value="Mac"> Mac
+      <input type="checkbox" name="operational_system" th:each="tempSystem : ${systems}" th:field="*{systemsWithKnowledge}" th:value="${tempSystem}" th:text="${tempSystem}">
       <br><br>
 
       <input type="submit">
