@@ -41,6 +41,10 @@ public class DemoConfigSecurity {
         .formLogin(form -> form
             .loginPage("/login")
             .loginProcessingUrl("/authenticate")
+            .permitAll())
+        .logout(logout -> logout
+            .logoutUrl("/custom-logout")
+            .logoutSuccessUrl("/login?logout_custom")
             .permitAll());
 
     return http.build();

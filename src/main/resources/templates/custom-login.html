@@ -39,12 +39,12 @@
           <button type="submit" class="btn btn-primary">Login</button>
         </form>
 
-        <div>
-          <p th:if="${param.error}" class="alert alert-danger mt-3 d-flex justify-content-center">Invalid username /
-            password</p>
-        </div>
-      </div>
+        <p th:if="${param.error}" class="alert alert-danger mt-3 d-flex justify-content-center">Invalid username / password</p>
+        <!-- Spring security redirects logout to login page with 'logout' param -->
+        <p th:if="${param.logout_custom}" class="alert alert-success mt-3 d-flex justify-content-center">You have been logged out</p>
+
     </div>
+  </div>
   </div>
 </body>
 
