@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.danmou.beginner.entity.Employee;
 import com.danmou.beginner.service.EmployeeService;
-
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/employees")
@@ -32,16 +32,24 @@ public class EmployeeController {
 
   @GetMapping("/create-form")
   public String createForm(Model model) {
-     Employee employee = new Employee();
-     model.addAttribute("employee", employee);
-   
-     return "employees/create-form";
+    Employee employee = new Employee();
+    model.addAttribute("employee", employee);
+
+    return "employees/create-form";
   }
 
   @PostMapping("/save")
-  public String saveEmployee(@ModelAttribute("employee") Employee employee) {
-      employeeService.save(employee);
+  public String saveEmployee(@ModelAttribute Employee employee) {
+    employeeService.save(employee);
 
-      return "redirect:/employees/all";
+    return "redirect:/employees/all";
+  }
+
+  @GetMapping("/update-form")
+  public String updateForm(@RequestParam int id, Model model) {
+    Employee employee = employeeService.findById(id);
+    model.addAttribute("employee", employee);
+    
+    return "employees/create-form";
   }
 }
