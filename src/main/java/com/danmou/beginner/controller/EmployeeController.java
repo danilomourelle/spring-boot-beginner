@@ -49,7 +49,14 @@ public class EmployeeController {
   public String updateForm(@RequestParam int id, Model model) {
     Employee employee = employeeService.findById(id);
     model.addAttribute("employee", employee);
-    
+
     return "employees/create-form";
+  }
+
+  @GetMapping("/delete")
+  public String delete(@RequestParam int id) {
+    employeeService.deleteById(id);
+
+    return "redirect:/employees/all";
   }
 }
