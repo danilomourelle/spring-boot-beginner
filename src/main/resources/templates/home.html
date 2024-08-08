@@ -12,9 +12,12 @@
 <body class="p-3">
   <h2>Spring MVC Security Module</h2>
   <hr>
+
   <p>User: <span sec:authentication="principal.username"></span></p>
   <p>Role(s): <span sec:authentication="principal.authorities"></span></p>
+  <p> <a th:href="@{/leaders}">Leadership Meeting</a> (Only for Manager people)</p>
   <hr>
+
   <p>Lorem ipsum dolor sit amet stet euismod justo sea est sea sed et diam ipsum duis. Et elitr eu erat dolor diam.
     Sanctus rebum eos et lorem et est erat invidunt.</p>
 
