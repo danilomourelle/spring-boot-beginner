@@ -32,4 +32,6 @@ logging:
             bind: trace
       springframework:
         security: DEBUG
+        jdbc:
+          core: TRACE
     root: warn
