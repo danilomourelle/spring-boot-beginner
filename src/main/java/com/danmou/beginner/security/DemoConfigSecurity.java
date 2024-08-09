@@ -28,7 +28,7 @@ public class DemoConfigSecurity {
     UserDetails susan = User.builder()
         .username("susan")
         .password("{noop}test123")
-        .roles("EMPLOYEE", "MANAGER", "ADMIN")
+        .roles("EMPLOYEE", "ADMIN")
         .build();
 
     return new InMemoryUserDetailsManager(john, mary, susan);

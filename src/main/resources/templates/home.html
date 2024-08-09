@@ -15,8 +15,8 @@
 
   <p>User: <span sec:authentication="principal.username"></span></p>
   <p>Role(s): <span sec:authentication="principal.authorities"></span></p>
-  <p> <a th:href="@{/leaders}">Leadership Meeting</a> (Only for Manager people)</p>
-  <p> <a th:href="@{/systems}">IT Systems Meeting</a> (Only for Admin people)</p>
+  <p sec:authorize="hasRole('MANAGER')"> <a th:href="@{/leaders}">Leadership Meeting</a> (Only for Manager people)</p>
+  <p sec:authorize="hasRole('ADMIN')"> <a th:href="@{/systems}">IT Systems Meeting</a> (Only for Admin people)</p>
   <hr>
 
   <p>Consetetur dolores rebum magna. Laoreet tempor dolor sit eum et duo id nonumy et sea nonumy tempor stet dolor
