@@ -50,7 +50,9 @@ public class DemoConfigSecurity {
         .logout(logout -> logout
             .logoutUrl("/custom-logout")
             .logoutSuccessUrl("/login?logout_custom")
-            .permitAll());
+            .permitAll())
+        .exceptionHandling(configurer -> configurer
+            .accessDeniedPage("/access-denied"));
 
     return http.build();
   }
