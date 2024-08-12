@@ -1,10 +1,14 @@
 package com.danmou.beginner.repository;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.danmou.beginner.entity.User;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
+@Repository
 public class UserRepositoryImpl implements UserRepository {
 
   private EntityManager entityManager;
@@ -16,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
   @Override
   public User findByUsername(String username) {
     TypedQuery<User> query = entityManager
-        .createQuery("FROM User WHERE userName=:username and enable=true", User.class)
+        .createQuery("FROM User WHERE username=:username and enabled=true", User.class)
         .setParameter("username", username);
 
     try {
@@ -27,9 +31,10 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
+  @Transactional
   public void save(User user) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'save'");
+    // create the user ... finally LOL
+		entityManager.merge(user);
   }
 
 }

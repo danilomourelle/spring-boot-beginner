@@ -1,10 +1,13 @@
 package com.danmou.beginner.repository;
 
+import org.springframework.stereotype.Repository;
+
 import com.danmou.beginner.entity.Role;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
+@Repository
 public class RoleRepositoryImpl implements RoleRepository {
 
   private EntityManager entityManager;

@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
   public void save(UserWeb userWeb) {
     User user = new User();
 
-    user.setUserName(userWeb.getUsername());
+    user.setUsername(userWeb.getUsername());
     user.setPassword(passwordEncoder.encode(userWeb.getPassword()));
     user.setFirstName(userWeb.getFirstName());
     user.setLastName(userWeb.getLastName());
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     Collection<SimpleGrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());
 
-    return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
         authorities);
   }
 
