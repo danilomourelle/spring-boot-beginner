@@ -20,7 +20,7 @@
         <div class="card-body">
           <div class="card-text">
             <!-- Registration Form -->
-            <form action="#" th:action="@{/register/process}" th:object="${webUser}" method="POST"
+            <form action="#" th:action="@{/register/process}" th:object="${userWeb}" method="POST"
               class="form-horizontal">
 
               <!-- Place for messages: error, alert etc ... -->
@@ -28,9 +28,9 @@
                 <div class="col-xs-15">
                   <div>
                     <!-- Check for login error -->
-                    <div th:if="${param.registrationError}">
+                    <div th:if="${registrationError}">
                       <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-                        <span th:text="${param.registrationError}"></span>
+                        <span th:text="${registrationError}"></span>
                       </div>
                     </div>
                   </div>

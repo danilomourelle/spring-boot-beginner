@@ -11,15 +11,15 @@
 
 	<!-- display first name, last name and email -->
 	<ul>
-		<li th:text="'User name: ' + ${webUser.username}"></li>
-		<li th:text="'First name: ' + ${webUser.firstName}"></li>
-		<li th:text="'Last name: ' + ${webUser.lastName}"></li>
-		<li th:text="'Email name: ' + ${webUser.email}"></li>
+		<li th:text="'User name: ' + ${userWeb.username}"></li>
+		<li th:text="'First name: ' + ${userWeb.firstName}"></li>
+		<li th:text="'Last name: ' + ${userWeb.lastName}"></li>
+		<li th:text="'Email name: ' + ${userWeb.email}"></li>
 	</ul>
 
 	<hr>
 	
-	<a th:href="@{/showMyLoginPage}">Login with new user name</a>
+	<a th:href="@{/login}">Login with new user name</a>
 	
 </body>
 

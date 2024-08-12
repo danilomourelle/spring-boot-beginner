@@ -47,8 +47,8 @@ public class RegistrationController {
     return "register/registration-form";
   }
 
-  @PostMapping("/process-register")
-  public String processRegistrationForm(
+  @PostMapping("/process")
+  public String registerProcessPage(
       @Valid @ModelAttribute() UserWeb userWeb,
       BindingResult theBindingResult,
       HttpSession session,
@@ -59,6 +59,7 @@ public class RegistrationController {
 
     // form validation
     if (theBindingResult.hasErrors()) {
+      logger.warning("Error on form data");
       return "register/registration-form";
     }
 

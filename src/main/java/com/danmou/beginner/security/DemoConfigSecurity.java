@@ -6,6 +6,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.danmou.beginner.service.UserService;
 
@@ -27,7 +28,8 @@ public class DemoConfigSecurity {
   }
 
   @Bean
-  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  SecurityFilterChain filterChain(HttpSecurity http, AuthenticationSuccessHandler customAuthenticationSuccessHandler)
+      throws Exception {
     http
         .authorizeHttpRequests(configurer -> configurer
             .requestMatchers("/").hasRole("EMPLOYEE")
@@ -38,6 +40,7 @@ public class DemoConfigSecurity {
         .formLogin(form -> form
             .loginPage("/login")
             .loginProcessingUrl("/authenticate")
+            .successHandler(customAuthenticationSuccessHandler)
             .permitAll())
         .logout(logout -> logout
             .logoutUrl("/custom-logout")
