@@ -39,7 +39,7 @@ public class RegistrationController {
     dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
   }
 
-  @GetMapping("/")
+  @GetMapping()
   public String registerPage(Model model) {
 
     model.addAttribute("userWeb", new UserWeb());
