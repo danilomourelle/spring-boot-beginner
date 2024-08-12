@@ -1,24 +1,29 @@
 package com.danmou.beginner.security;
 
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.danmou.beginner.service.UserService;
 
 @Configuration
 public class DemoConfigSecurity {
 
   @Bean
-  UserDetailsManager userDetailsManager(DataSource dataSource) {
-    JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-    userDetailsManager.setUsersByUsernameQuery("SELECT user_id_, pw, active FROM members WHERE user_id=?");
-    userDetailsManager.setAuthoritiesByUsernameQuery("SELECT user_id, role FROM roles WHERE user_id=?");
+  BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    return userDetailsManager;
+  @Bean
+  DaoAuthenticationProvider authenticationProvider(UserService userService) {
+    DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+    auth.setUserDetailsService(userService); // set the custom user details service
+    auth.setPasswordEncoder(passwordEncoder()); // set the password encoder - bcrypt
+    
+    return auth;
   }
 
   @Bean
@@ -28,8 +33,8 @@ public class DemoConfigSecurity {
             .requestMatchers("/").hasRole("EMPLOYEE")
             .requestMatchers("/leaders/**").hasRole("MANAGER")
             .requestMatchers("/systems/**").hasRole("ADMIN")
-            .anyRequest()
-            .authenticated())
+            .requestMatchers("/register/**").permitAll()
+            .anyRequest().authenticated())
         .formLogin(form -> form
             .loginPage("/login")
             .loginProcessingUrl("/authenticate")
