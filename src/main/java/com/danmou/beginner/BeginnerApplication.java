@@ -5,6 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.danmou.beginner.dao.AppDAO;
+import com.danmou.beginner.entity.Instructor;
+import com.danmou.beginner.entity.InstructorDetail;
+
 @SpringBootApplication()
 public class BeginnerApplication {
 
@@ -13,9 +17,18 @@ public class BeginnerApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(String[] args) {
+	CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			System.out.println("Hello World");
+			createInstructor(appDAO);
 		};
+	}
+
+	private void createInstructor(AppDAO appDAO) {
+		Instructor instructor = new Instructor("Chad", "Darby", "darby@email.com");
+		InstructorDetail instructorDetail = new InstructorDetail("Darbyed", "Run");
+
+		instructor.setInstructorDetail(instructorDetail);
+
+		appDAO.save(instructor);
 	}
 }
