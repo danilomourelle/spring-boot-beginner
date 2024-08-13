@@ -24,6 +24,7 @@ spring:
 
 logging:
   level:
+    root: warn
     org:
       hibernate:
         SQL: debug
@@ -33,5 +34,4 @@ logging:
       springframework:
         security: DEBUG
         jdbc:
-          core: TRACE
-    root: warn
+          core: INFO
