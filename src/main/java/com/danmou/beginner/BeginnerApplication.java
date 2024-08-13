@@ -19,7 +19,8 @@ public class BeginnerApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			createInstructor(appDAO);
+			// createInstructor(appDAO);
+			findInstructor(appDAO);
 		};
 	}
 
@@ -30,5 +31,13 @@ public class BeginnerApplication {
 		instructor.setInstructorDetail(instructorDetail);
 
 		appDAO.save(instructor);
+	}
+
+	private void findInstructor(AppDAO appDAO) {
+		int id = 1;
+
+		Instructor instructor = appDAO.findInstructorById(id);
+		System.out.println("Instructor: " + instructor);
+		System.out.println("Instructor Detail: " + instructor.getInstructorDetail());
 	}
 }
