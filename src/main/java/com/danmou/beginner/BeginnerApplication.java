@@ -20,13 +20,14 @@ public class BeginnerApplication {
 	CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
 			// createInstructor(appDAO);
-			findInstructor(appDAO);
+			// findInstructor(appDAO);
+			deleteInstructor(appDAO);
 		};
 	}
 
 	private void createInstructor(AppDAO appDAO) {
-		Instructor instructor = new Instructor("Chad", "Darby", "darby@email.com");
-		InstructorDetail instructorDetail = new InstructorDetail("Darbyed", "Run");
+		Instructor instructor = new Instructor("Lowei", "Kim", "kim@email.com");
+		InstructorDetail instructorDetail = new InstructorDetail("Darbyed", "Read");
 
 		instructor.setInstructorDetail(instructorDetail);
 
@@ -39,5 +40,11 @@ public class BeginnerApplication {
 		Instructor instructor = appDAO.findInstructorById(id);
 		System.out.println("Instructor: " + instructor);
 		System.out.println("Instructor Detail: " + instructor.getInstructorDetail());
+	}
+
+	private void deleteInstructor(AppDAO appDAO) {
+		int id = 3;
+
+		appDAO.deleteInstructorById(id);
 	}
 }

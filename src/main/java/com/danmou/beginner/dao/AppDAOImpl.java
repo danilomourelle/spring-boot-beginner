@@ -26,4 +26,11 @@ public class AppDAOImpl implements AppDAO {
   public Instructor findInstructorById(int id) {
     return entityManager.find(Instructor.class, id);
   }
+
+  @Override
+  @Transactional
+  public void deleteInstructorById(int id) {
+      Instructor instructor = entityManager.getReference(Instructor.class, id);
+      entityManager.remove(instructor);
+  }
 }
