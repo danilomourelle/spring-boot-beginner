@@ -21,7 +21,8 @@ public class BeginnerApplication {
 		return runner -> {
 			// createInstructor(appDAO);
 			// findInstructor(appDAO);
-			deleteInstructor(appDAO);
+			// deleteInstructor(appDAO);
+			findInstructorDetail(appDAO);
 		};
 	}
 
@@ -41,10 +42,18 @@ public class BeginnerApplication {
 		System.out.println("Instructor: " + instructor);
 		System.out.println("Instructor Detail: " + instructor.getInstructorDetail());
 	}
-
+	
 	private void deleteInstructor(AppDAO appDAO) {
 		int id = 3;
-
+		
 		appDAO.deleteInstructorById(id);
+	}
+	
+	private void findInstructorDetail(AppDAO appDAO){
+		int id = 1;
+		
+		InstructorDetail instructorDetail = appDAO.findInstructorDetailById(id);
+		System.out.println("Instructor Detail: " + instructorDetail);
+		System.out.println("Instructor: " + instructorDetail.getInstructor());
 	}
 }
