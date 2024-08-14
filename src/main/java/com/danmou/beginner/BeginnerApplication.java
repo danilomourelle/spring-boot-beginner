@@ -25,7 +25,8 @@ public class BeginnerApplication {
 			// deleteInstructor(appDAO);
 			// findInstructorDetail(appDAO);
 			// deleteInstructorDetail(appDAO);
-			createInstructorWithCourses(appDAO);
+			// createInstructorWithCourses(appDAO);
+			findInstructorWithCourses(appDAO);
 		};
 	}
 
@@ -78,5 +79,13 @@ public class BeginnerApplication {
 		instructor.addCourse(course2);
 
 		appDAO.save(instructor);
+	}
+
+	private void findInstructorWithCourses(AppDAO appDAO) {
+		int id = 10;
+		Instructor instructor = appDAO.findInstructorById(id);
+
+		System.out.println("Instructor: " + instructor);
+		System.out.println("Associated courses: " + instructor.getCourses());
 	}
 }
