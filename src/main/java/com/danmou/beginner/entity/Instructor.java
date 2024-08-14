@@ -1,5 +1,8 @@
 package com.danmou.beginner.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -30,6 +34,9 @@ public class Instructor {
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "instructor_detail_id")
   private InstructorDetail instructorDetail;
+
+  @OneToMany( mappedBy = "instructor", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+  private List<Course> courses = new ArrayList<>();
 
   public Instructor() {
   }
@@ -78,6 +85,15 @@ public class Instructor {
 
   public void setInstructorDetail(InstructorDetail instructorDetail) {
     this.instructorDetail = instructorDetail;
+  }
+
+  public List<Course> getCourses() {
+    return courses;
+  }
+
+  public void addCourse(Course course) {
+    courses.add(course);
+    course.setInstructor(this);
   }
 
   @Override

@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.danmou.beginner.dao.AppDAO;
+import com.danmou.beginner.entity.Course;
 import com.danmou.beginner.entity.Instructor;
 import com.danmou.beginner.entity.InstructorDetail;
 
@@ -19,11 +20,12 @@ public class BeginnerApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			createInstructor(appDAO);
+			// createInstructor(appDAO);
 			// findInstructor(appDAO);
 			// deleteInstructor(appDAO);
 			// findInstructorDetail(appDAO);
-			deleteInstructorDetail(appDAO);
+			// deleteInstructorDetail(appDAO);
+			createInstructorWithCourses(appDAO);
 		};
 	}
 
@@ -62,5 +64,19 @@ public class BeginnerApplication {
 		int id = 5;
 		
 		appDAO.deleteInstructorDetailById(id);
+	}
+
+	private void createInstructorWithCourses(AppDAO appDAO){
+		Instructor instructor = new Instructor("Mark", "Steffano", "staffno@email.com");
+		InstructorDetail instructorDetail = new InstructorDetail("Stuffano", "Ride horse");
+		instructor.setInstructorDetail(instructorDetail);
+
+		Course course1 = new Course("Pinball Masterclass");
+		Course course2 = new Course("Air Guitar - The Ultimate Guide");
+
+		instructor.addCourse(course1);
+		instructor.addCourse(course2);
+
+		appDAO.save(instructor);
 	}
 }
