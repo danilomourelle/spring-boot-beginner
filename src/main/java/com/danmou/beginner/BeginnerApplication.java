@@ -19,15 +19,16 @@ public class BeginnerApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			// createInstructor(appDAO);
+			createInstructor(appDAO);
 			// findInstructor(appDAO);
 			// deleteInstructor(appDAO);
-			findInstructorDetail(appDAO);
+			// findInstructorDetail(appDAO);
+			deleteInstructorDetail(appDAO);
 		};
 	}
 
 	private void createInstructor(AppDAO appDAO) {
-		Instructor instructor = new Instructor("Lowei", "Kim", "kim@email.com");
+		Instructor instructor = new Instructor("Lowei", "Kim", "kim2@email.com");
 		InstructorDetail instructorDetail = new InstructorDetail("Darbyed", "Read");
 
 		instructor.setInstructorDetail(instructorDetail);
@@ -55,5 +56,11 @@ public class BeginnerApplication {
 		InstructorDetail instructorDetail = appDAO.findInstructorDetailById(id);
 		System.out.println("Instructor Detail: " + instructorDetail);
 		System.out.println("Instructor: " + instructorDetail.getInstructor());
+	}
+
+	private void deleteInstructorDetail(AppDAO appDAO) {
+		int id = 5;
+		
+		appDAO.deleteInstructorDetailById(id);
 	}
 }
