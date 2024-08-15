@@ -23,6 +23,10 @@ public class InstructorDetail {
   @Column(name = "hobby")
   private String hobby;
 
+  /**
+   * Since one-to-one has a Eager fetch type,
+   * be careful to with a cycle fetch whe using bi-direction relation
+   */
   @OneToOne(mappedBy = "instructorDetail", cascade = CascadeType.ALL)
   private Instructor instructor;
 

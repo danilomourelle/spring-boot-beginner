@@ -31,6 +31,14 @@ public class Instructor {
   @Column(name = "email")
   private String email;
 
+  /**
+   * FETCH TYPE
+   * 
+   * One-to-one -> Eager
+   * One-to-many -> Lazy
+   * many-to-one -> Eager
+   * many-to-many - Lazy
+   */
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "instructor_detail_id")
   private InstructorDetail instructorDetail;

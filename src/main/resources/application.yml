@@ -14,7 +14,7 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
+    # show-sql: true
   main:
     banner-mode: off
   security:
@@ -27,7 +27,7 @@ logging:
     root: warn
     org:
       hibernate:
-        SQL: debug
+        SQL: trace
         orm:
           jdbc:
             bind: trace

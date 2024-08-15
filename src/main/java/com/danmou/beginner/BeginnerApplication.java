@@ -2,7 +2,6 @@ package com.danmou.beginner;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,12 +14,6 @@ import com.danmou.beginner.entity.InstructorDetail;
 
 @SpringBootApplication()
 public class BeginnerApplication {
-
-	@Autowired
-	private InstructorService instructorService;
-
-	@Autowired
-	private AppDAO appDAO;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BeginnerApplication.class, args);
@@ -35,7 +28,7 @@ public class BeginnerApplication {
 			// findInstructorDetail(appDAO);
 			// deleteInstructorDetail(appDAO);
 			// createInstructorWithCourses(appDAO);
-			findInstructorWithCourses();
+			findInstructorWithCourses(appDAO);
 		};
 	}
 
@@ -90,30 +83,24 @@ public class BeginnerApplication {
 		appDAO.save(instructor);
 	}
 
-	/*
-	 * private void findInstructorWithCourses(AppDAO appDAO) {
-	 * int id = 10;
-	 * Instructor instructor = appDAO.findInstructorById(id);
-	 * List<Course> courses = appDAO.findCoursesByInstructorId(instructor.getId());
-	 * 
-	 * instructor.setCourses(courses);
-	 * 
-	 * System.out.println("Instructor: " + instructor);
-	 * System.out.println("Associated courses: " + instructor.getCourses());
-	 * }
-	 */
-
-	private void findInstructorWithCourses() {
+	private void findInstructorWithCourses(AppDAO appDAO) {
 		int id = 10;
-		Instructor instructor = instructorService.findInstructorWithCourses(id);
+		Instructor instructor = appDAO.findInstructorById(id);
+		List<Course> courses = appDAO.findCoursesByInstructorId(instructor.getId());
 
-		// Print the type of the courses field before accessing it
-		// System.out.println("Courses field type before accessing: " + instructor.getCourses());
+		System.out.println("Before: " + instructor.getCourses().getClass());
+		instructor.setCourses(courses);
+		System.out.println("After: " + instructor.getCourses().getClass());
 
-		// Print the type of the courses field after accessing it
-		// System.out.println("Courses field type after accessing: " + instructor.getCourses().getClass().getName());
+		// System.out.println("Instructor: " + instructor);
+		// System.out.println("Associated courses: " + instructor.getCourses());
 
-		System.out.println("Instructor: " + instructor);
-		System.out.println("Associated courses: " + instructor.getCourses());
+		/* 
+		 * Podemos reparar que o tipo do campo "courses" não é mais uma List, mas sim um tipo de Hibernate.
+		 * Esse tipo, quando tem uma sessão aberta com o banco de dados vai se comportar como uma lista,
+		 * mas nos casos em que a sessão já foi encerrada, ele vai dar o erro e LazyException ao tentar manipulá-lo.
+		 * Então utilizar o método "addCourse" não vai funcionar, e por isso foi preciso criar o método "setCourse",
+		 * assim a gente consegue simplesmente sobrescrever o campo inteiro, alternando inclusive a tipagem.
+		 */
 	}
 }
