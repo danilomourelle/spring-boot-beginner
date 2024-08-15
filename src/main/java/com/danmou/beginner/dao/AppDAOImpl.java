@@ -1,12 +1,16 @@
 package com.danmou.beginner.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.danmou.beginner.entity.Course;
 import com.danmou.beginner.entity.Instructor;
 import com.danmou.beginner.entity.InstructorDetail;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 @Repository
 public class AppDAOImpl implements AppDAO {
@@ -45,5 +49,18 @@ public class AppDAOImpl implements AppDAO {
   public void deleteInstructorDetailById(int id) {
     InstructorDetail instructorDetail = entityManager.find(InstructorDetail.class, id);
     entityManager.remove(instructorDetail);
+  }
+
+  @Override
+  public List<Course> findCoursesByInstructorId(int id) {
+    TypedQuery<Course> query = entityManager
+        .createQuery("FROM Course WHERE instructor.id = :data", Course.class)
+        .setParameter("data", id);
+
+    List<Course> courses = query.getResultList();
+
+    System.out.println("Courses" + courses);
+
+    return courses;
   }
 }
