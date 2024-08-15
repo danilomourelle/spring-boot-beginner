@@ -28,7 +28,9 @@ public class BeginnerApplication {
 			// findInstructorDetail(appDAO);
 			// deleteInstructorDetail(appDAO);
 			// createInstructorWithCourses(appDAO);
-			findInstructorWithCourses(appDAO);
+			// findInstructorWithCourses(appDAO);
+			findInstructorWithCoursesJoinFetch(appDAO);
+
 		};
 	}
 
@@ -102,5 +104,13 @@ public class BeginnerApplication {
 		 * Então utilizar o método "addCourse" não vai funcionar, e por isso foi preciso criar o método "setCourse",
 		 * assim a gente consegue simplesmente sobrescrever o campo inteiro, alternando inclusive a tipagem.
 		 */
+	}
+
+	private void findInstructorWithCoursesJoinFetch(AppDAO appDAO) {
+		int id = 10;
+		Instructor instructor = appDAO.findInstructorByIdJoinFetch(id);
+
+		System.out.println("Instructor: " + instructor);
+		System.out.println("Associated courses: " + instructor.getCourses());
 	}
 }
