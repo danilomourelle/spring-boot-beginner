@@ -1,5 +1,8 @@
 package com.danmou.beginner.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,6 +28,14 @@ public class Course {
   @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
   @JoinColumn(name = "instructor_id")
   private Instructor instructor;
+
+  /**
+   * Since the will be a unidirectional relation, 
+   * the JoinColumn will stay here despite the foreign key exists in review table
+   */
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "course_id")
+  List<Review> reviews = new ArrayList<>();
 
   public Course() {
   }
@@ -54,6 +66,18 @@ public class Course {
 
   public void setInstructor(Instructor instructor) {
     this.instructor = instructor;
+  }
+
+  public List<Review> getReviews() {
+    return reviews;
+  }
+
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
+  }
+
+  public void addReview(Review review) {
+    reviews.add(review);
   }
 
   @Override
