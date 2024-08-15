@@ -36,9 +36,11 @@ public class AppDAOImpl implements AppDAO {
   @Transactional
   public void deleteInstructorById(int id) {
     /**
-     * If 'getReference' is used the query do retrieve data is not immediately executed,
+     * If 'getReference' is used the query do retrieve data is not immediately
+     * executed,
      * instead, ORM will keep watching it, and just query when necessary.
-     * For example, in this method, it will print "Lazy" message before select instructor,
+     * For example, in this method, it will print "Lazy" message before select
+     * instructor,
      * but if replace 'getReference' by 'find' select is executed before message.
      */
     Instructor instructor = entityManager.getReference(Instructor.class, id);
@@ -46,7 +48,7 @@ public class AppDAOImpl implements AppDAO {
     /**
      * Since course is linked to instructor,
      * it couses instructor should be set to null before removal.
-     * Any attempt to remove instructor without detach it from course, 
+     * Any attempt to remove instructor without detach it from course,
      * it will throw an error of constraint.
      */
     System.out.println("Lazy fetch should happens");
@@ -111,5 +113,13 @@ public class AppDAOImpl implements AppDAO {
   @Transactional
   public void updateCourse(Course course) {
     entityManager.merge(course);
+  }
+
+  @Override
+  @Transactional
+  public void deleteCourseById(int id) {
+    Course course = entityManager.getReference(Course.class, id);
+
+    entityManager.remove(course);
   }
 }

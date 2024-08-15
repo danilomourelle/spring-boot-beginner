@@ -24,7 +24,7 @@ public class BeginnerApplication {
 		return runner -> {
 			// createInstructor(appDAO);
 			// findInstructor(appDAO);
-			deleteInstructor(appDAO);
+			// deleteInstructor(appDAO);
 			// findInstructorDetail(appDAO);
 			// deleteInstructorDetail(appDAO);
 			// createInstructorWithCourses(appDAO);
@@ -32,6 +32,7 @@ public class BeginnerApplication {
 			// findInstructorWithCoursesJoinFetch(appDAO);
 			// updateInstructor(appDAO);
 			// updateCourse(appDAO);
+			deleteCourse(appDAO);
 		};
 	}
 
@@ -152,5 +153,11 @@ public class BeginnerApplication {
 		 * This is because they check all the values of the entity to really set a good update query.
 		 * We can notice that run updateCourse twice will produce a update query at first but not at second.
 		 */
+	}
+
+	private void deleteCourse(AppDAO appDAO) {
+		int courseId = 3;
+
+		appDAO.deleteCourseById(courseId);
 	}
 }
