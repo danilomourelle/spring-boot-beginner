@@ -53,7 +53,7 @@ public class BeginnerApplication {
 	}
 
 	private void deleteInstructor(AppDAO appDAO) {
-		int id = 3;
+		int id = 10;
 
 		appDAO.deleteInstructorById(id);
 	}
@@ -98,7 +98,7 @@ public class BeginnerApplication {
 		// System.out.println("Instructor: " + instructor);
 		// System.out.println("Associated courses: " + instructor.getCourses());
 
-		/*
+		/**
 		 * Podemos reparar que o tipo do campo "courses" não é mais uma List, mas sim um
 		 * tipo de Hibernate.
 		 * Esse tipo, quando tem uma sessão aberta com o banco de dados vai se comportar
@@ -130,11 +130,27 @@ public class BeginnerApplication {
 	}
 
 	private void updateCourse(AppDAO appDAO) {
-		int id = 3;
-		Course course = appDAO.findCourseById(id);
+		int courseId = 3;
+		int instructorId = 7;
+		
+		Course course = appDAO.findCourseById(courseId);
+		Instructor instructor = appDAO.findInstructorById(instructorId);
+
+		instructor.setFirstName("Changed");
 
 		course.setTitle("Mahjong - The relaxing game");
+		course.setInstructor(instructor);
 
 		appDAO.updateCourse(course);
+		/**
+		 * How update a instructor related to a course, and save the course will also save the instructor.
+		 * This happens because de cascade config on entities.
+		 * 
+		 * But why it does a select twice??
+		 * Because ORM always do a select before a update.
+		 * So in this case we have a select for the find method, and a seconde select when updating.
+		 * This is because they check all the values of the entity to really set a good update query.
+		 * We can notice that run updateCourse twice will produce a update query at first but not at second.
+		 */
 	}
 }
