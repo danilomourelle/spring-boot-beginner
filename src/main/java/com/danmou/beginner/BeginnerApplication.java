@@ -24,14 +24,14 @@ public class BeginnerApplication {
 		return runner -> {
 			// createInstructor(appDAO);
 			// findInstructor(appDAO);
-			// deleteInstructor(appDAO);
+			deleteInstructor(appDAO);
 			// findInstructorDetail(appDAO);
 			// deleteInstructorDetail(appDAO);
 			// createInstructorWithCourses(appDAO);
 			// findInstructorWithCourses(appDAO);
 			// findInstructorWithCoursesJoinFetch(appDAO);
 			// updateInstructor(appDAO);
-			updateCourse(appDAO);
+			// updateCourse(appDAO);
 		};
 	}
 
@@ -53,7 +53,7 @@ public class BeginnerApplication {
 	}
 
 	private void deleteInstructor(AppDAO appDAO) {
-		int id = 10;
+		int id = 13;
 
 		appDAO.deleteInstructorById(id);
 	}
