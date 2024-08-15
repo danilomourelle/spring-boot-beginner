@@ -29,7 +29,8 @@ public class BeginnerApplication {
 			// deleteInstructorDetail(appDAO);
 			// createInstructorWithCourses(appDAO);
 			// findInstructorWithCourses(appDAO);
-			findInstructorWithCoursesJoinFetch(appDAO);
+			// findInstructorWithCoursesJoinFetch(appDAO);
+			updateInstructor(appDAO);
 
 		};
 	}
@@ -97,12 +98,17 @@ public class BeginnerApplication {
 		// System.out.println("Instructor: " + instructor);
 		// System.out.println("Associated courses: " + instructor.getCourses());
 
-		/* 
-		 * Podemos reparar que o tipo do campo "courses" não é mais uma List, mas sim um tipo de Hibernate.
-		 * Esse tipo, quando tem uma sessão aberta com o banco de dados vai se comportar como uma lista,
-		 * mas nos casos em que a sessão já foi encerrada, ele vai dar o erro e LazyException ao tentar manipulá-lo.
-		 * Então utilizar o método "addCourse" não vai funcionar, e por isso foi preciso criar o método "setCourse",
-		 * assim a gente consegue simplesmente sobrescrever o campo inteiro, alternando inclusive a tipagem.
+		/*
+		 * Podemos reparar que o tipo do campo "courses" não é mais uma List, mas sim um
+		 * tipo de Hibernate.
+		 * Esse tipo, quando tem uma sessão aberta com o banco de dados vai se comportar
+		 * como uma lista,
+		 * mas nos casos em que a sessão já foi encerrada, ele vai dar o erro e
+		 * LazyException ao tentar manipulá-lo.
+		 * Então utilizar o método "addCourse" não vai funcionar, e por isso foi preciso
+		 * criar o método "setCourse",
+		 * assim a gente consegue simplesmente sobrescrever o campo inteiro, alternando
+		 * inclusive a tipagem.
 		 */
 	}
 
@@ -112,5 +118,14 @@ public class BeginnerApplication {
 
 		System.out.println("Instructor: " + instructor);
 		System.out.println("Associated courses: " + instructor.getCourses());
+	}
+
+	private void updateInstructor(AppDAO appDAO) {
+		int id = 10;
+		Instructor instructor = appDAO.findInstructorById(id);
+
+		instructor.setLastName("Tester");
+
+		appDAO.updateInstructor(instructor);
 	}
 }
