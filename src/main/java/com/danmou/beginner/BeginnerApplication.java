@@ -30,8 +30,8 @@ public class BeginnerApplication {
 			// createInstructorWithCourses(appDAO);
 			// findInstructorWithCourses(appDAO);
 			// findInstructorWithCoursesJoinFetch(appDAO);
-			updateInstructor(appDAO);
-
+			// updateInstructor(appDAO);
+			updateCourse(appDAO);
 		};
 	}
 
@@ -127,5 +127,14 @@ public class BeginnerApplication {
 		instructor.setLastName("Tester");
 
 		appDAO.updateInstructor(instructor);
+	}
+
+	private void updateCourse(AppDAO appDAO) {
+		int id = 3;
+		Course course = appDAO.findCourseById(id);
+
+		course.setTitle("Mahjong - The relaxing game");
+
+		appDAO.updateCourse(course);
 	}
 }
