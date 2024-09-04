@@ -11,6 +11,7 @@ import com.danmou.beginner.dao.AppDAO;
 import com.danmou.beginner.entity.Course;
 import com.danmou.beginner.entity.Instructor;
 import com.danmou.beginner.entity.InstructorDetail;
+import com.danmou.beginner.entity.Review;
 
 @SpringBootApplication()
 public class BeginnerApplication {
@@ -134,7 +135,7 @@ public class BeginnerApplication {
 	private void updateCourse(AppDAO appDAO) {
 		int courseId = 3;
 		int instructorId = 7;
-		
+
 		Course course = appDAO.findCourseById(courseId);
 		Instructor instructor = appDAO.findInstructorById(instructorId);
 
@@ -145,14 +146,18 @@ public class BeginnerApplication {
 
 		appDAO.updateCourse(course);
 		/**
-		 * How update a instructor related to a course, and save the course will also save the instructor.
+		 * How update a instructor related to a course, and save the course will also
+		 * save the instructor?
 		 * This happens because de cascade config on entities.
 		 * 
 		 * But why it does a select twice??
 		 * Because ORM always do a select before a update.
-		 * So in this case we have a select for the find method, and a seconde select when updating.
-		 * This is because they check all the values of the entity to really set a good update query.
-		 * We can notice that run updateCourse twice will produce a update query at first but not at second.
+		 * So in this case we have a select for the find method, and a seconde select
+		 * when updating.
+		 * This is because they check all the values of the entity to really set a good
+		 * update query.
+		 * We can notice that run updateCourse twice will produce a update query at
+		 * first but not at second.
 		 */
 	}
 
