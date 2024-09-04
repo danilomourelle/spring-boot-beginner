@@ -32,7 +32,8 @@ public class BeginnerApplication {
 			// findInstructorWithCoursesJoinFetch(appDAO);
 			// updateInstructor(appDAO);
 			// updateCourse(appDAO);
-			deleteCourse(appDAO);
+			// deleteCourse(appDAO);
+			createCourseWithReviews(appDAO);
 		};
 	}
 
@@ -159,5 +160,17 @@ public class BeginnerApplication {
 		int courseId = 3;
 
 		appDAO.deleteCourseById(courseId);
+	}
+
+	private void createCourseWithReviews(AppDAO appDAO) {
+		Review review1 = new Review("Top 10");
+		Review review2 = new Review("Could not be better");
+
+		Course course = new Course("JavaScript: The best programming language");
+
+		course.addReview(review1);
+		course.addReview(review2);
+
+		appDAO.saveCourse(course);
 	}
 }

@@ -122,4 +122,14 @@ public class AppDAOImpl implements AppDAO {
 
     entityManager.remove(course);
   }
+
+  /**
+   * Since it has a relation to Review, nad has cascade ALL,
+   * it will also save any data that has changed in related reviews
+   */
+  @Override
+  @Transactional
+  public void saveCourse(Course course) {
+    entityManager.persist(course);
+  }
 }
