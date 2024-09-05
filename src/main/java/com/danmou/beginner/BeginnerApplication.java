@@ -219,4 +219,13 @@ public class BeginnerApplication {
 
 		appDAO.saveCourse(course);
 	}
+
+	private void retrieveCourseWithStudents(AppDAO appDAO) {
+		int courseId = 3;
+		Course course = appDAO.findCourseAndStudentsByCourseId(courseId);
+
+		System.out.println(course);
+		System.out.println(course.getStudents());
+	}
+
 }

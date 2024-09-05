@@ -135,13 +135,25 @@ public class AppDAOImpl implements AppDAO {
 
   /**
    * The JOIN FETCH is a JPA syntax and is used to really make a join query.
-   * If we just use "JOIN" it will just fetch for first entity and lazily fetch second.
+   * If we just use "JOIN" it will just fetch for first entity and lazily fetch
+   * second.
    */
   @Override
   public Course findCourseAndReviewsByCourseId(int id) {
     TypedQuery<Course> query = entityManager
-    .createQuery("SELECT c FROM Course c JOIN FETCH c.reviews WHERE c.id = :data", Course.class)
-    .setParameter("data", id);
+        .createQuery("SELECT c FROM Course c JOIN FETCH c.reviews WHERE c.id = :data", Course.class)
+        .setParameter("data", id);
+
+    Course course = query.getSingleResult();
+
+    return course;
+  }
+
+  @Override
+  public Course findCourseAndStudentsByCourseId(int id) {
+    TypedQuery<Course> query = entityManager
+        .createQuery("SELECT c FROM Course c JOIN FETCH c.students WHERE c.id = :data", Course.class)
+        .setParameter("data", id);
 
     Course course = query.getSingleResult();
 
