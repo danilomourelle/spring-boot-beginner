@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.danmou.beginner.entity.Course;
 import com.danmou.beginner.entity.Instructor;
 import com.danmou.beginner.entity.InstructorDetail;
+import com.danmou.beginner.entity.Student;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -158,5 +159,16 @@ public class AppDAOImpl implements AppDAO {
     Course course = query.getSingleResult();
 
     return course;
+  }
+
+  @Override
+  public Student findStudentAndCoursesByStudentId(int id) {
+    TypedQuery<Student> query = entityManager
+        .createQuery("SELECT s FROM Student s JOIN FETCH s.courses WHERE s.id = :data", Student.class)
+        .setParameter("data", id);
+
+    Student student = query.getSingleResult();
+
+    return student;
   }
 }

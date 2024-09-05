@@ -5,6 +5,7 @@ import java.util.List;
 import com.danmou.beginner.entity.Course;
 import com.danmou.beginner.entity.Instructor;
 import com.danmou.beginner.entity.InstructorDetail;
+import com.danmou.beginner.entity.Student;
 
 public interface AppDAO {
   void save(Instructor instructor);
@@ -34,4 +35,6 @@ public interface AppDAO {
   Course findCourseAndReviewsByCourseId(int id);
 
   Course findCourseAndStudentsByCourseId(int id);
+
+  Student findStudentAndCoursesByStudentId(int id);
 }

@@ -228,4 +228,11 @@ public class BeginnerApplication {
 		System.out.println(course.getStudents());
 	}
 
+	private void findStudentAndCourses(AppDAO appDAO) {
+		int studentId = 2;
+		Student student = appDAO.findStudentAndCoursesByStudentId(studentId);
+
+		System.out.println(student);
+		System.out.println(student.getCourses());
+	}
 }
