@@ -41,7 +41,8 @@ public class BeginnerApplication {
 			// createCourseAndStudents(appDAO);
 			// retrieveCourseWithStudents(appDAO);
 			// findStudentAndCourses(appDAO);
-			addCourseToStudent(appDAO);
+			// addCourseToStudent(appDAO);
+			deleteStudent(appDAO);
 		};
 	}
 
@@ -253,5 +254,11 @@ public class BeginnerApplication {
 
 		System.out.println(student);
 		System.out.println(student.getCourses());
+	}
+
+	private void deleteStudent(AppDAO appDAO) {
+		int studentId = 2;
+
+		appDAO.deleteStudentById(studentId);
 	}
 }
