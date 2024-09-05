@@ -35,7 +35,9 @@ public class BeginnerApplication {
 			// updateCourse(appDAO);
 			// deleteCourse(appDAO);
 			// createCourseWithReviews(appDAO);
-			retrieveCourseWithReviews(appDAO);
+			// retrieveCourseWithReviews(appDAO);
+			// deleteCourseWithReviews(appDAO);
+
 		};
 	}
 
@@ -187,5 +189,10 @@ public class BeginnerApplication {
 		System.out.println(course);
 
 		System.out.println(course.getReviews());
+	}
+
+	private void deleteCourseWithReviews(AppDAO appDAO) {
+		int courseId = 1;
+		appDAO.deleteCourseById(courseId);
 	}
 }
