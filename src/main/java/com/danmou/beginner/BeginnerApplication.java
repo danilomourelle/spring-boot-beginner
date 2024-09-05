@@ -38,7 +38,10 @@ public class BeginnerApplication {
 			// createCourseWithReviews(appDAO);
 			// retrieveCourseWithReviews(appDAO);
 			// deleteCourseWithReviews(appDAO);
-			createCourseAndStudents(appDAO);
+			// createCourseAndStudents(appDAO);
+			// retrieveCourseWithStudents(appDAO);
+			// findStudentAndCourses(appDAO);
+			addCourseToStudent(appDAO);
 		};
 	}
 
@@ -139,7 +142,7 @@ public class BeginnerApplication {
 	private void updateCourse(AppDAO appDAO) {
 		int courseId = 3;
 		int instructorId = 7;
-		
+
 		/**
 		 * Once course has a many-to-one relation with Instructor,
 		 * it has a eager fetch type.
@@ -208,8 +211,8 @@ public class BeginnerApplication {
 	private void createCourseAndStudents(AppDAO appDAO) {
 		Course course = new Course("NodeJS: The game changer for JavaScript");
 
-		Student student1 =  new Student("Danilo", "Mourelle", "danilomourelle@email.com");
-		Student student2 =  new Student("Mary", "Markle", "marymarkle@email.com");
+		Student student1 = new Student("Danilo", "Mourelle", "danilomourelle@email.com");
+		Student student2 = new Student("Mary", "Markle", "marymarkle@email.com");
 
 		course.addStudent(student1);
 		course.addStudent(student2);
@@ -231,6 +234,22 @@ public class BeginnerApplication {
 	private void findStudentAndCourses(AppDAO appDAO) {
 		int studentId = 2;
 		Student student = appDAO.findStudentAndCoursesByStudentId(studentId);
+
+		System.out.println(student);
+		System.out.println(student.getCourses());
+	}
+	
+	private void addCourseToStudent(AppDAO appDAO) {
+		int studentId = 2;
+		Student student = appDAO.findStudentAndCoursesByStudentId(studentId);
+		
+		Course course1 = new Course("FluentBit: Does anyone knows how to use it");
+		Course course2 = new Course("ElasticSearch: a database for your business");
+
+		student.addCourse(course1);
+		student.addCourse(course2);
+
+		appDAO.updateStudent(student);
 
 		System.out.println(student);
 		System.out.println(student.getCourses());
