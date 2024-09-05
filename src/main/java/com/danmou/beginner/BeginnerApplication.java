@@ -12,6 +12,7 @@ import com.danmou.beginner.entity.Course;
 import com.danmou.beginner.entity.Instructor;
 import com.danmou.beginner.entity.InstructorDetail;
 import com.danmou.beginner.entity.Review;
+import com.danmou.beginner.entity.Student;
 
 @SpringBootApplication()
 public class BeginnerApplication {
@@ -37,7 +38,7 @@ public class BeginnerApplication {
 			// createCourseWithReviews(appDAO);
 			// retrieveCourseWithReviews(appDAO);
 			// deleteCourseWithReviews(appDAO);
-
+			createCourseAndStudents(appDAO);
 		};
 	}
 
@@ -138,8 +139,16 @@ public class BeginnerApplication {
 	private void updateCourse(AppDAO appDAO) {
 		int courseId = 3;
 		int instructorId = 7;
-
+		
+		/**
+		 * Once course has a many-to-one relation with Instructor,
+		 * it has a eager fetch type.
+		 * So in this case, the select for course table
+		 * will also have a join call to instructor table
+		 */
 		Course course = appDAO.findCourseById(courseId);
+		System.out.println(course.getInstructor());
+
 		Instructor instructor = appDAO.findInstructorById(instructorId);
 
 		instructor.setFirstName("Changed");
@@ -194,5 +203,20 @@ public class BeginnerApplication {
 	private void deleteCourseWithReviews(AppDAO appDAO) {
 		int courseId = 1;
 		appDAO.deleteCourseById(courseId);
+	}
+
+	private void createCourseAndStudents(AppDAO appDAO) {
+		Course course = new Course("NodeJS: The game changer for JavaScript");
+
+		Student student1 =  new Student("Danilo", "Mourelle", "danilomourelle@email.com");
+		Student student2 =  new Student("Mary", "Markle", "marymarkle@email.com");
+
+		course.addStudent(student1);
+		course.addStudent(student2);
+
+		System.out.println(course);
+		System.out.println(course.getStudents());
+
+		appDAO.saveCourse(course);
 	}
 }
