@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS course (
 CREATE TABLE IF NOT EXISTS review (
    id serial PRIMARY KEY,
    comment TEXT DEFAULT NULL,
-   course_id INT NOT NULL,
+   course_id INT,
    CONSTRAINT "course_id_fkey" FOREIGN KEY (course_id) REFERENCES course(id)
 );

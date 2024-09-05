@@ -30,8 +30,14 @@ public class Course {
   private Instructor instructor;
 
   /**
-   * Since the will be a unidirectional relation, 
-   * the JoinColumn will stay here despite the foreign key exists in review table
+   * Since it will be a unidirectional relation, 
+   * the JoinColumn will stay here despite the foreign key exists in review table.
+   * But this will have a side effect. The hibernate will first insert the review
+   * them it will update it to set the course_id, even though it already has course_id info when inserting review.
+   * 
+   * One way to prevent this, is the bidirectional relation,
+   * and updating the 'addReview' method to add review to list
+   * but also set the current course (this) to review.
    */
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "course_id")
