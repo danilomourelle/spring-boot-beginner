@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.danmou.beginner.dao.AccountDAO;
 import com.danmou.beginner.dao.MembershipDAO;
+import com.danmou.beginner.entity.Account;
 
 @SpringBootApplication()
 public class BeginnerApplication {
@@ -23,13 +24,12 @@ public class BeginnerApplication {
 	}
 
 	private void demoOfBeforeAdvice(AccountDAO accountDAO, MembershipDAO membershipDAO) {
-		System.out.println("Common method");
-		accountDAO.addAccount();
-		
-		System.out.println("\nGetter");
+		accountDAO.addAccount(new Account("Foo", "Bar"));
+
 		accountDAO.getBar();
-		
-		System.out.println("\nSetter");
+
 		accountDAO.setBar("null");
+
+		membershipDAO.addMember();
 	}
 }

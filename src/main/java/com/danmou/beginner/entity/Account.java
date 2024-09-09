@@ -21,4 +21,9 @@ public class Account {
   public void setLevel(String level) {
     this.level = level;
   }
+
+  @Override
+  public String toString() {
+    return "Account [username=" + username + ", level=" + level + "]";
+  }
 }
