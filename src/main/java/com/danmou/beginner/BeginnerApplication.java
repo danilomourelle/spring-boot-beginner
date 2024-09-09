@@ -31,6 +31,6 @@ public class BeginnerApplication {
 
 		System.out.println("\nAdding membership");
 
-		membershipDAO.addAccount();
+		membershipDAO.addMember();
 	}
 }
