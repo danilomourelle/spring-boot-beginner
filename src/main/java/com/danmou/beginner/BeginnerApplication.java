@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.danmou.beginner.dao.AccountDAO;
+import com.danmou.beginner.dao.MembershipDAO;
 
 @SpringBootApplication()
 public class BeginnerApplication {
@@ -15,17 +16,21 @@ public class BeginnerApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(AccountDAO accountDAO) {
+	CommandLineRunner commandLineRunner(AccountDAO accountDAO, MembershipDAO membershipDAO) {
 		return runner -> {
-			demoOfBeforeAdvice(accountDAO);
+			demoOfBeforeAdvice(accountDAO, membershipDAO);
 		};
 	}
 
-	private void demoOfBeforeAdvice(AccountDAO accountDAO) {
+	private void demoOfBeforeAdvice(AccountDAO accountDAO, MembershipDAO membershipDAO) {
 		accountDAO.addAccount();
 
 		System.out.println("\ndoing it again\n");
 
 		accountDAO.addAccount();
+
+		System.out.println("\nAdding membership");
+
+		membershipDAO.addAccount();
 	}
 }
