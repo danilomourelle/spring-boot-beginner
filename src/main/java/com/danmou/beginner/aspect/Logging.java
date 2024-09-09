@@ -9,16 +9,21 @@ import org.springframework.stereotype.Component;
 public class Logging {
   @Before("execution(public void com.danmou.beginner.dao.AccountDAO.addAccount())")
   public void beforeAddAccountAdvice() {
-    System.out.println("\n==========> Executing Before advice on addAccount()");
+    System.out.println("==========> Executing Before advice on AccountDAO.addAccount()");
+  }
+
+  @Before("execution(* add*(com.danmou.beginner.entity.Account))")
+  public void beforeAddAccountWithParamAdvice() {
+    System.out.println("==========> Executing Before advice on add*(Account)");
   }
 
   @Before("execution(* add*())")
   public void beforeAddAdvice() {
-    System.out.println("\n==========> Executing Before advice on add*()");
+    System.out.println("==========> Executing Before advice on add*()");
   }
 
   @Before("execution(public void updateAccount())")
   public void beforeUpdateAccountAdvice() {
-    System.out.println("\n==========> Executing Before advice on updateAccount()");
+    System.out.println("==========> Executing Before advice on updateAccount()");
   }
 }
