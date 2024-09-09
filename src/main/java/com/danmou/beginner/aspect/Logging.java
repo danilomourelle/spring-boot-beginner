@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class Logging {
-  @Before("execution(public void addAccount())")
+  @Before("execution(public void com.danmou.beginner.dao.AccountDAO.addAccount())")
   public void beforeAddAccountAdvice() {
     System.out.println("\n==========> Executing Before advice on addAccount()");
   }
