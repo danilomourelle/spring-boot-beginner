@@ -22,6 +22,11 @@ public class Logging {
     System.out.println("==========> Executing Before advice on add*()");
   }
 
+  @Before("execution(* com.danmou.beginner.dao.*.*(..))")
+  public void beforeEverybodyAdvice() {
+    System.out.println("==========> Executing Before advice on * com.danmou.beginner.dao.*.*(..)");
+  }
+
   @Before("execution(public void updateAccount())")
   public void beforeUpdateAccountAdvice() {
     System.out.println("==========> Executing Before advice on updateAccount()");
