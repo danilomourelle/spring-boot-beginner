@@ -12,7 +12,7 @@ public class Logging {
     System.out.println("\n==========> Executing Before advice on addAccount()");
   }
 
-  @Before("execution(public void add*())")
+  @Before("execution(boolean add*())")
   public void beforeAddAdvice() {
     System.out.println("\n==========> Executing Before advice on add*()");
   }
