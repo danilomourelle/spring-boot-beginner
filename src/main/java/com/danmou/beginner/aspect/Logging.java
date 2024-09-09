@@ -1,34 +1,25 @@
 package com.danmou.beginner.aspect;
 
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
 public class Logging {
-  @Before("execution(public void com.danmou.beginner.dao.AccountDAO.addAccount())")
+  @Pointcut("execution(* com.danmou.beginner.dao.*.*(..))")
+  private void forDaoPackage() {
+  };
+
+  @Before("forDaoPackage()")
   public void beforeAddAccountAdvice() {
-    System.out.println("==========> Executing Before advice on AccountDAO.addAccount()");
+    System.out.println("==========> Executing Before advice on using PointCut");
   }
 
-  @Before("execution(* add*(com.danmou.beginner.entity.Account))")
-  public void beforeAddAccountWithParamAdvice() {
-    System.out.println("==========> Executing Before advice on add*(Account)");
-  }
-
-  @Before("execution(* add*())")
-  public void beforeAddAdvice() {
-    System.out.println("==========> Executing Before advice on add*()");
-  }
-
-  @Before("execution(* com.danmou.beginner.dao.*.*(..))")
-  public void beforeEverybodyAdvice() {
-    System.out.println("==========> Executing Before advice on * com.danmou.beginner.dao.*.*(..)");
-  }
-
-  @Before("execution(public void updateAccount())")
-  public void beforeUpdateAccountAdvice() {
-    System.out.println("==========> Executing Before advice on updateAccount()");
+  @After("forDaoPackage()")
+  public void afterAllAdvices() {
+    System.out.println("==========> Executing After advice on using PointCut");
   }
 }
