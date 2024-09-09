@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Order(20)
-public class Logging {
+@Order(10)
+public class Security {
   @Before("com.danmou.beginner.aspect.Expressions.beforePackageNoGetterSetter()")
-  public void someAdvice() {
-    System.out.println("======> Logging advice");
+  public void secureMethod() {
+    System.out.println("======> Secure advice");
   }
 }
