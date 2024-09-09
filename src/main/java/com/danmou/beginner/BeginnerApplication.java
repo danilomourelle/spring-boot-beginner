@@ -1,7 +1,5 @@
 package com.danmou.beginner;
 
-import java.util.List;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,6 +22,10 @@ public class BeginnerApplication {
 	}
 
 	private void demoOfBeforeAdvice(AccountDAO accountDAO) {
+		accountDAO.addAccount();
+
+		System.out.println("\ndoing it again\n");
+
 		accountDAO.addAccount();
 	}
 }
