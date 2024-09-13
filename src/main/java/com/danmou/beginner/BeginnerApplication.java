@@ -23,10 +23,25 @@ public class BeginnerApplication {
 		return runner -> {
 			// demoOfBeforeAdvice(accountDAO, membershipDAO);
 			// demoAfterReturningAdvice(accountDAO);
-			demoAfterThrowingAdvice(accountDAO);
+			// demoAfterThrowingAdvice(accountDAO);
+			demoAfterAdvice(accountDAO);
 		};
 	}
 
+	private void demoAfterAdvice(AccountDAO accountDAO){
+		System.out.println("Leaving Main");
+		try {
+			List<Account> accounts = accountDAO.findAccounts();
+			for (Account account : accounts) {
+				System.out.println(account);
+			}
+			Account account = accountDAO.findAccountByUsername();
+		} catch (Exception e) {
+			System.out.println("Back to Main");
+			System.out.println(e);
+		}
+
+	}
 	private void demoAfterThrowingAdvice(AccountDAO accountDAO) {
 		System.out.println("Leaving Main");
 		try {
