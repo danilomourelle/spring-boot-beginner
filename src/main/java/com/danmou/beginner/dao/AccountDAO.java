@@ -18,4 +18,6 @@ public interface AccountDAO {
   public void setBar(String bar);
 
   public List<Account> findAccounts();
+
+  public Account findAccountByUsername();
 }

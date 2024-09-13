@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -45,5 +46,15 @@ public class Logging {
     for (Account account : result) {
       account.setUsername(account.getUsername().toUpperCase());
     }
+  }
+  
+  @AfterThrowing(pointcut = "execution(* com.danmou.beginner.dao.AccountDAO.findAccountByUsername())", throwing = "error")
+  public void afterReturningFindAccountsAdvice(JoinPoint joinPoint, Throwable error) {
+    System.out.println("======> Logging advice - After Throwing");
+
+    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+    System.out.println("   " + signature);
+
+    System.out.println("   " + error);
   }
 }

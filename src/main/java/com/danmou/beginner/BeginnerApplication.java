@@ -22,14 +22,26 @@ public class BeginnerApplication {
 	CommandLineRunner commandLineRunner(AccountDAO accountDAO, MembershipDAO membershipDAO) {
 		return runner -> {
 			// demoOfBeforeAdvice(accountDAO, membershipDAO);
-			demoAfterReturningAdvice(accountDAO);
+			// demoAfterReturningAdvice(accountDAO);
+			demoAfterThrowingAdvice(accountDAO);
 		};
 	}
 
-	private void demoAfterReturningAdvice(AccountDAO accountDAO){
+	private void demoAfterThrowingAdvice(AccountDAO accountDAO) {
+		System.out.println("Leaving Main");
+		try {
+			Account account = accountDAO.findAccountByUsername();
+		} catch (Exception e) {
+			System.out.println("Back to Main");
+			System.out.println(e);
+		}
+
+	}
+
+	private void demoAfterReturningAdvice(AccountDAO accountDAO) {
 		System.out.println("Leaving Main");
 		List<Account> accounts = accountDAO.findAccounts();
-		
+
 		System.out.println("Back to Main");
 		System.out.println(accounts);
 	}

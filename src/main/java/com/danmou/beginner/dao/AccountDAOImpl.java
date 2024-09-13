@@ -42,16 +42,22 @@ public class AccountDAOImpl implements AccountDAO {
   public void addAccount(Account account) {
     System.out.println("======> DAO: public void AccountDAO.addAccount(Account account)");
   }
-  
+
   @Override
   public List<Account> findAccounts() {
     System.out.println("======> DAO: public void AccountDAO.findAccounts()");
     List<Account> accounts = new ArrayList<>();
-
+    
     accounts.add(new Account("John", "Gold"));
     accounts.add(new Account("Luca", "Silver"));
     accounts.add(new Account("Mary", "Bronze"));
-
+    
     return accounts;
+  }
+  
+  @Override
+  public Account findAccountByUsername() {
+    System.out.println("======> DAO: public void AccountDAO.findAccountsByUsername()");
+    throw new RuntimeException("Buuhhhhh");
   }
 }
