@@ -41,5 +41,9 @@ public class Logging {
     System.out.println("   " + signature);
 
     System.out.println("   " + result);
+
+    for (Account account : result) {
+      account.setUsername(account.getUsername().toUpperCase());
+    }
   }
 }
