@@ -1,5 +1,7 @@
 package com.danmou.beginner;
 
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,8 +21,17 @@ public class BeginnerApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(AccountDAO accountDAO, MembershipDAO membershipDAO) {
 		return runner -> {
-			demoOfBeforeAdvice(accountDAO, membershipDAO);
+			// demoOfBeforeAdvice(accountDAO, membershipDAO);
+			demoAfterReturningAdvice(accountDAO);
 		};
+	}
+
+	private void demoAfterReturningAdvice(AccountDAO accountDAO){
+		System.out.println("Leaving Main");
+		List<Account> accounts = accountDAO.findAccounts();
+		
+		System.out.println("Back to Main");
+		System.out.println(accounts);
 	}
 
 	private void demoOfBeforeAdvice(AccountDAO accountDAO, MembershipDAO membershipDAO) {

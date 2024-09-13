@@ -1,5 +1,7 @@
 package com.danmou.beginner.dao;
 
+import java.util.List;
+
 import com.danmou.beginner.entity.Account;
 
 public interface AccountDAO {
@@ -15,4 +17,5 @@ public interface AccountDAO {
 
   public void setBar(String bar);
 
+  public List<Account> findAccounts();
 }

@@ -1,6 +1,9 @@
 package com.danmou.beginner.aspect;
 
+import java.util.List;
+
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -18,7 +21,7 @@ public class Logging {
     System.out.println("======> Logging advice");
 
     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-    System.out.println(signature);
+    System.out.println("   " + signature);
 
     Object[] args = joinPoint.getArgs();
     for (Object argument : args) {
@@ -28,5 +31,15 @@ public class Logging {
         System.out.println(account.getUsername());
       }
     }
+  }
+
+  @AfterReturning(pointcut = "execution(* com.danmou.beginner.dao.AccountDAO.findAccounts())", returning = "result")
+  public void afterReturningFindAccountsAdvice(JoinPoint joinPoint, List<Account> result) {
+    System.out.println("======> Logging advice - After Returning");
+
+    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+    System.out.println("   " + signature);
+
+    System.out.println("   " + result);
   }
 }

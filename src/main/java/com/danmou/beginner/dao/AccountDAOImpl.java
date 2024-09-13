@@ -1,5 +1,8 @@
 package com.danmou.beginner.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.danmou.beginner.entity.Account;
@@ -14,7 +17,7 @@ public class AccountDAOImpl implements AccountDAO {
     System.out.println("======> DAO: Getter on method getFoo");
     return foo;
   }
-  
+
   public void setFoo(String foo) {
     System.out.println("======> DAO: Setter on method getFoo");
     this.foo = foo;
@@ -24,7 +27,7 @@ public class AccountDAOImpl implements AccountDAO {
     System.out.println("======> DAO: Getter on method getBar");
     return bar;
   }
-  
+
   public void setBar(String bar) {
     System.out.println("======> DAO: Setter on method getBar");
     this.bar = bar;
@@ -38,5 +41,17 @@ public class AccountDAOImpl implements AccountDAO {
   @Override
   public void addAccount(Account account) {
     System.out.println("======> DAO: public void AccountDAO.addAccount(Account account)");
+  }
+  
+  @Override
+  public List<Account> findAccounts() {
+    System.out.println("======> DAO: public void AccountDAO.findAccounts()");
+    List<Account> accounts = new ArrayList<>();
+
+    accounts.add(new Account("John", "Gold"));
+    accounts.add(new Account("Luca", "Silver"));
+    accounts.add(new Account("Mary", "Bronze"));
+
+    return accounts;
   }
 }
