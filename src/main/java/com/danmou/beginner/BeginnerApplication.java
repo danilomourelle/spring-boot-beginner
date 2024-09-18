@@ -24,11 +24,28 @@ public class BeginnerApplication {
 			// demoOfBeforeAdvice(accountDAO, membershipDAO);
 			// demoAfterReturningAdvice(accountDAO);
 			// demoAfterThrowingAdvice(accountDAO);
-			demoAfterAdvice(accountDAO);
+			// demoAfterAdvice(accountDAO);
+			demoAroundAdvice(accountDAO);
 		};
 	}
 
-	private void demoAfterAdvice(AccountDAO accountDAO){
+	private void demoAroundAdvice(AccountDAO accountDAO) {
+		System.out.println("Leaving Main");
+		try {
+			accountDAO.addAccount(new Account("Foo", "Bar"));
+			List<Account> accounts = accountDAO.findAccounts();
+			for (Account account : accounts) {
+				System.out.println("main - response " + account);
+			}
+			Account account = accountDAO.findAccountByUsername();
+			System.out.println("main - account that could failure " + account);
+		} catch (Exception e) {
+			System.out.println("Back to Main");
+			System.out.println(e);
+		}
+	}
+
+	private void demoAfterAdvice(AccountDAO accountDAO) {
 		System.out.println("Leaving Main");
 		try {
 			List<Account> accounts = accountDAO.findAccounts();
@@ -42,6 +59,7 @@ public class BeginnerApplication {
 		}
 
 	}
+
 	private void demoAfterThrowingAdvice(AccountDAO accountDAO) {
 		System.out.println("Leaving Main");
 		try {
