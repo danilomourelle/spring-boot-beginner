@@ -32,4 +32,4 @@ logging:
             bind: trace
       springframework:
         security: DEBUG
-    root: warn
+    root: INFO
