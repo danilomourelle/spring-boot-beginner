@@ -203,3 +203,52 @@ Com essa dependência, é possível adicionar uma série de anotações nos atri
 
 Esses erros ficam disponíveis na integração do validador com o Thymeleaf para que seja possível mostrar a mensagem de erro após essa nova renderização.
 
+### AOP - Aspect Oriented Program
+
+A ideia desse conceito é quando você tem o seu fluxo de código normal, então a requisição entrando em uma camada, a lógica sendo centralizada em uma camada de serviço, e interações com a fonte de dados em uma camada DAO. Agora imagine que a gente queira aplicar algum código auxiliar entre essas camadas, por exemplo um log para indicar qual o dado está sendo utilizado na query. Você pode apenas embutir isso no método que de fato interage com o banco de dados, mas caso o sistema cresça você vai precisaria incluir esse logs em todos os cases. 
+
+A gente poderia pensar em criar uma classe para gerir esses códigos auxiliares, mas como utilizá-la? Tentar utilizar herança pode também não ser a opção, porque Java não permite múltiplas extensões, então pode não ser mais possível extender. E tentar criar um sistema de injeção de dependência também vai ter seu pontos negativos.
+
+A questão é, imagina que você cria uma classe de log que coloca em todos os DAOs. Agora se por acaso surge mais um código auxiliar, você precisaria voltar em todos os DAOs e injetar mais uma dependência e chamar essas dependência em uma classe de código principal, "sujando" o código.
+
+A sugestão é o que se chama de Aspect Oriented Program (AOP), onde você teria componentes que seriam executados automaticamente em determinadas situações configuráveis. É como se você tivesse um sistema de hooks, onde você configura que para cada parte de um código, algo em outro local deve acontecer sem ter uma chamada explicita para isso.
+
+Essa estratégia dá como vantagem o ponto de que todo código auxiliar fica concentrado em um local, então não precisa depois ficar caçando código relacionado pelos vários DAOs. Outra vantagem é que se esse código não está na sua camada principal, isso vai deixar o código mais limpo. E como comentado, essa é uma ferramenta configurável nessas classes complementares, então por exemplo, caso você já tenha um projeto sem essa estratégia e resolva implementá-la, você teoricamente não precisaria alterar o seu código principal.
+
+Alguns conceitos que existem nesse conceito são:
+- **Aspect**: o módulo que vai representar esse agrupamento auxiliar (log, security, audit), acredito que vai ser representado por uma classe;
+- **Advice**: a ação que deve ser realizada, acredito que vai ser representada por um método;
+- **Join Point**: indicação do momento em que essa ação deve acontecer, me parece que é indicado com uma anotação;
+- **Pointcut**: indicação de a quem esse auxiliar vai se ligar, acredito que vai ser um parâmetro da anotação.
+
+Nós podemos indicar como **Join Point** que o **Advice** aconteça antes, após (_finally_), após sucesso, após falha, e ambos antes e após. Já em relação ao **Pointcut** nós temos uma gama de configurações, porém todas elas serão apenas uma string, portanto sem Intellisense. A ideia é que você tem como opções indicar o modificador, retorno, classe, método (com parâmetros) e exceções do alvo do advice. Dessas opções, apenas o retorno e o método são obrigatórios, dessa forma, para os opcionais, caso eles não sejam configurados eles vão ser considerados como wildcards. Por exemplo, se não passarmos o nome da classe, ele vai atuar em todos os métodos de mesmo nome, independente de em qual classe o método esteja.
+
+Além disse, ainda existe uma possibilidade de utilizar um wildcard no nome do método, por exemplo `add*` vai disparar para todo método que inicie com add, como addUser, addAccount... O mesmo valor para o tipo do retorno que é obrigatório, mas aceita o valor `*` para indicar qualquer tipo de retorno.
+
+Um detalhe interessante é que caso a classe seja indicada, não basta apenas colocar o nome da classe, mas sim todo o nome do pacote ao qual ela pertence.
+
+Quando se trata de indicar os parâmetros de um método, você tem como opção colocar `()` para um método sem parâmetro, `(*)` para um método com um parâmetro de qualquer tipo, e `(..)` para métodos com qualquer quantidade de parâmetros de qualquer tipo.
+
+Com todas essas opções de wildcards, a gente consegue montar uma tratativa bem ampla no qual a gente consegue aplicar o advice para qualquer método de um pacote. Para isso basta utilizar `"execution(* com.danmou.beginner.dao.*.*(..))"` que basicamente coloca um wildcard para informação de retorno, de classes no pacote desejado, de método nas classes e de qualquer parametrização que venha a ser utilizada.
+
+É possível criar um **Pointcut** reutilizável com uma anotação. Dessa forma caso você precise aplicá-lo em mais de um advice, não precisa ter um sistema de copia e cola, mas basta referencia o método que tem a anotação. Também é possível fazer a combinação de **Pointcut** utilizando a simbologia de `&& || !` igual ao que se faz em uma expressão `if()`.
+
+Quando você tem um **Aspect** com vários **Advices**, eles serão aplicado em uma ordem indefinida. Mas caso seja necessário implementar uma ordem de execução nos **Advices** (lembre-se que **Aspects** deveriam ser códigos auxiliares e portanto dificilmente precisariam de ordem), o recomendo e separá-los em em **Aspects** diferentes, e então ordenar os **Aspects** com a anotação `@Order` que vai receber um número inteiro.
+
+Esse número vai representar a ordem com que o **Aspect** será executado. **Advices** de um mesmo **Aspect** não serão ordenados. O número das ordenações não precisam seguir um valor sequencial, assim como podem aceitar valores negativos. (Aqui imagino que a melhor forma de numerar é seguindo a estratégia de engenharia de processos, em que se numera de 10 em 10 para que caso o processo tenha um passo acrescentado é possível encaixá-lo sem a necessidade de renumerar todos os passos).
+
+- *Podemos reutilizar o mesmo pointcut em mais de um aspect?* 355
+Sim podemos, para isso basta ter o **Pointcut** declarado em algum **Aspect** e quanto for usá-lo em um outro, ao invés de apenas fazer uma referência o nome do método, deve-se utilizar a referência global da classe no projeto.
+
+- *Conseguimos ter acesso aos parâmetros de um método?*
+Sim, não só dos parâmetros mas como de alguns outros dados também. Na declaração do método que vai representar o **Advice**, é possível colocar um parâmetro com o tipo *JoinPoint* que vai ser passado automaticamente pelo framework no momento de sua execução. Dentro desse objeto vamos ter alguns métodos que vão tornar possível recuperar informações do método na cadeia principal da aplicação. Por exemplo, para acessar a assinatura da função de disparou o **Advice** nós podemos chamar `(MethodSignature) theJoinPoint.getSignature()`. Já para pegar os argumentos, podemos pegar como um array fazendo `Object[] args = theJoinPoint.getArgs()`. Mas nesse caso, a gente precisa se atentar com os tipos de cada um dos elementos. Aqui no Java também temos o operador `instanceof`.
+
+Caso o **Joint Point** utilizado seja do tipo `@AfterReturning`, o **Advice** pode ser utilizado para pós processamento de dados. Isso quer dizer que ele consegue interceptar os dados de uma função do caminho principal e realizar algum tipo de processamento antes que ele seja devolvido para de fato quem a chamou. Isso parece o tipo de ferramenta muito poderosa, mas que pode ser traiçoeira, afinal você vai ter alguém modificando dados, sem estar explicitamente ligada na linha de processamento. 
+
+Um detalhe experimentando é que na verdade para esse tipo de advice, caso o argumento seja um objeto, o que ele recebe é a referência desse objeto, então alterações nos dados dessa referência, acabam por refletir em quem quer que tenha acesso a essa referência, mas no caso de um argumento um valor primitivo, o advice acaba recebendo uma cópia e portanto qualquer modificação realizada no advice vai ficar restrita a esse escopo. Esse tipo de advice não tem como retornar um valor, mas aparentemente o `@Around` tem, então veremos mais pra frente.
+
+Caso o **Joint Point** utilizado seja do tipo `@AfterThrowing` ele vai funcionar de forma semelhante ao anterior, mas apenas nos casos em que o alvo do advice lançar uma exceção. Da mesma forma é possível ter acesso ao erro para fazer algum tipo de avaliação, ou notificação. Temos que destacar que a exceção não vai ser parada, ela apenas vai ser capturada, lida, mas após o fim da execução do Advice, ela vai seguir o seu caminho. Novamente, parece que o `@Around` consegue parar a propagação da exceção.
+
+Caso o **Joint Point** utilizado seja do tipo `@After` ele vai funcionar de forma semelhante ao `@Before`, mas nesse caso ele vai ser executado depois do alvo, independente do resultado, se sucesso ou se falha. Foi passado que ele não tem acesso à exceção em casos de falha, então ela não pode ser utilizada como parte da lógica, assim como dados de sucesso, uma vez que, de novo, esse advice vai ser executado independente do resultado. 
+
+Caso o **Joint Point** utilizado seja do tipo `@Around` ele funciona como se fosse uma combinação do `@After` com o `@Before`. Pode ser usado para pré e pós processamento de dados, para a cronometrar o um processo específico. Porém, ao invés de ser executado tanto antes como depois do método alvo, o que acontece é que o advice vai ser executado antes do método alvo, e ele vai ter acesso ao _ProceedingJoinPoint_ que é um objeto que vai permitir chamar o método alvo como parte de sua execução e então ter acesso aos seus resultados. É como se ele virasse um envoltório do método alvo. Um detalhe é que como ele chama esse método alvo que pode lançar uma exceção, é interessante que isso seja feito dentro de um bloco try/catch, e nesses casos é possível até que ele intercepte a exceção, podendo apenas propagar ou bloquear. No caso so bloqueio, precisa tomar um certo cuidado caso se queira retornar algo no lugar da exceção, já que o retorno deve ser sempre do mesmo tipo da função alvo, mesmo que o advice indique que vai retornar `Object`.
